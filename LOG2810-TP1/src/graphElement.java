@@ -3,22 +3,55 @@ import java.util.*;
 
 public class graphElement 
 { 	
+	private static String fileName_ = "centresLocaux.txt";
+	
+	private int id_;
+	
+	private boolean hasRechargeStation_;
+	
+	public graphElement(int id, boolean hasRechargeStation) {
+		id_ = id;
+		hasRechargeStation_ = hasRechargeStation;
+	}
+	
+	//Méthode pour lire le fichier texte des centres CLSC
 	public static void main(String[] args) throws Exception 
 	{ 
-//		String fileName = "C:\\Users\\claud\\eclipse-workspace\\LOG2810-TP1\\src\\centresLocaux.txt";
-
-		File file = new File("C:\\Users\\claud\\eclipse-workspace\\LOG2810-TP1\\src\\centresLocaux.txt"); 
-	
+		File file = new File(fileName_); 
 		BufferedReader br = new BufferedReader(new FileReader(file)); 
 	
-		String line; 	
+		ArrayList<graphElement> vertex = new ArrayList<graphElement>();
+		readVertex(br, vertex);
+	}
+	
+	//Méthode pour lire récursivement chaque ligne du fichier et traiter l'info
+	public static void readVertex(BufferedReader br, ArrayList<graphElement> vertex) throws IOException {
+		String line; 
 		while ((line = br.readLine()) != null) 
 		{
 			String[] separated = line.split("\\,");
-			if(separated.length == 2)
-				System.out.println(separated[0]); 
-			else if(separated.length == 3)
-				System.out.println(separated[2]); 
+			if(separated.length == 2) {
+				vertex.add(new graphElement(Integer.parseInt(separated[0]), Boolean.parseBoolean(separated[1])));
+			}
+			else if(separated.length == 3) {
+				int[][] links = new int[vertex.size()][vertex.size()];
+				
+				
+				readLink(br, vertex, links);
+			}
+			readVertex(br, vertex);
 		}
-	} 
+	}
+	public static void readLink(BufferedReader br, ArrayList<graphElement> vertex, int[][] links) throws IOException {
+		String line; 
+		while ((line = br.readLine()) != null) 
+		{
+			String[] separated = line.split("\\,");
+
+			links[Integer.parseInt(separated[0])-1][Integer.parseInt(separated[1])-1] = Integer.parseInt(separated[2]);
+			links[Integer.parseInt(separated[1])-1][Integer.parseInt(separated[0])-1] = Integer.parseInt(separated[2]);
+			
+			readLink(br, vertex, links);
+		}
+	}
 } 
