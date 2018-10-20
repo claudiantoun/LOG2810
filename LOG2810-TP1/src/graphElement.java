@@ -50,8 +50,8 @@ public class graphElement
 		{
 			String[] separated = line.split("\\,");
 
-			links[Integer.parseInt(separated[0])][Integer.parseInt(separated[1])] = Integer.parseInt(separated[2]);
-			links[Integer.parseInt(separated[1])][Integer.parseInt(separated[0])] = Integer.parseInt(separated[2]);
+			links[Integer.parseInt(separated[0])-1][Integer.parseInt(separated[1])-1] = Integer.parseInt(separated[2]);
+			links[Integer.parseInt(separated[1])-1][Integer.parseInt(separated[0])-1] = Integer.parseInt(separated[2]);
 			
 			
 			line = br.readLine();
