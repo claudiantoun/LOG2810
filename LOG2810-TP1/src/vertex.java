@@ -41,7 +41,7 @@ public class vertex
 	}
 	
 	
-	public static int[][] readLinkElements(BufferedReader br, int[][] links, String line) throws IOException {
+	public static void readLinkElements(BufferedReader br, int[][] links, String line) throws IOException {
 		
 	
 		while (line != null) 
@@ -55,6 +55,6 @@ public class vertex
 			line = br.readLine();
 			readLinkElements(br, links, line);
 		}
-		return links;
+		
 	}
 } 
