@@ -4,16 +4,15 @@ import java.io.File;
 import java.io.FileReader;
 
 public class graphElement extends vertex
-{ 	
-
-	
-	public graphElement(int id, boolean hasRechargeStation) {		//Eclipse autocompleted this constructor but we could use it to stack the vertex/links info.
+{ 		
+	public graphElement(int id, boolean hasRechargeStation) 
+	{		
+		//Eclipse autocompleted this constructor but we could use it to stack the vertex/links info.
 		super(id, hasRechargeStation);
 		// TODO Auto-generated constructor stub
 	}
 
 	private static String fileName_ = "./centresLocaux.txt";
-	
 	
 	//Méthode pour lire le fichier texte des centres CLSC
 	public static void main(String[] args) throws Exception 
@@ -25,8 +24,6 @@ public class graphElement extends vertex
 		readVertex(br, vertex);
 		int[][] vertexLinks = links;
 		
-		System.out.print("HELL OH");
-		
+		displayMenu(vertex);
 	}
-	
 } 
