@@ -58,19 +58,23 @@ public class vertex
 		}
 	}
 	
-	public static void readGraph(int userInputReadGraph, int[][] links, ArrayList<vertex> vertex)
+	public static void readGraph(int[][] links, ArrayList<vertex> vertex)
 	{
-		System.out.print("(Sommet "+userInputReadGraph+",(");
-		for(int j = 0; j < vertex.size(); j++)
+		for(int i = 0; i < vertex.size(); i++)
 		{
-			if(links[userInputReadGraph-1][j] != 0)
+			int sommet = i+1;
+			System.out.print("(Sommet "+sommet+",(");
+			for(int j = 0; j < vertex.size(); j++)
 			{
-				int time = links[userInputReadGraph-1][j];
-				int neighbor = j+1;
-				System.out.print("("+neighbor+","+time+"),");
+				if(links[i][j] != 0)
+				{
+					int time = links[i][j];
+					int neighbor = j+1;
+					System.out.print("("+neighbor+","+time+"),");
+				}
 			}
+			System.out.print(")"+"\n");
 		}
-		System.out.print(")"+"\n");
 	}
 	
 	public static void makeAnotherChoice()
@@ -100,17 +104,17 @@ public class vertex
 		}
 	}
 	
-	public static void displayGraph(ArrayList<vertex> vertex)
-	{
-		Scanner scanReadGraph = new Scanner(System.in);
-		int userInputReadGraph = scanReadGraph.nextInt();
-		if(userInputReadGraph > vertex.size() || userInputReadGraph < 0) 
-		{
-			System.out.println("\n"+"Option invalide! Veuillez saisir une option entre 1 et 29!");
-			displayGraph(vertex);
-		}
-		readGraph(userInputReadGraph, links, vertex);
-	}
+//	public static void displayGraph(ArrayList<vertex> vertex)
+//	{
+//		Scanner scanReadGraph = new Scanner(System.in);
+//		int userInputReadGraph = scanReadGraph.nextInt();
+//		if(userInputReadGraph > vertex.size() || userInputReadGraph < 0) 
+//		{
+//			System.out.println("\n"+"Option invalide! Veuillez saisir une option entre 1 et 29!");
+//			displayGraph(vertex);
+//		}
+//		readGraph(userInputReadGraph, links, vertex);
+//	}
 	
 	public static void displayMenu(ArrayList<vertex> vertex)
 	{
@@ -130,7 +134,7 @@ public class vertex
 			switch(userInput)
 			{
 				case "1":	
-					System.out.println("Mettre à jour la carte");
+					readGraph(links, vertex);
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
@@ -140,8 +144,9 @@ public class vertex
 					makeAnotherChoice();
 					break;
 				case "3": 
-					System.out.println("\n"+"Entrer le sommet pour lequel vous voulez afficher le graphe (1 à 29):");
-					displayGraph(vertex);
+//					System.out.println("\n"+"Entrer le sommet pour lequel vous voulez afficher le graphe (1 à 29):");
+//					displayGraph(vertex);
+					System.out.println("Extraire un sous-graphe.");
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
