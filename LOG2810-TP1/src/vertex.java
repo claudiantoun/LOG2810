@@ -62,6 +62,7 @@ public class vertex
 	{
 		for(int i = 0; i < vertex.size(); i++)
 		{
+			String result = "";
 			int sommet = i+1;
 			System.out.print("(Sommet "+sommet+",(");
 			for(int j = 0; j < vertex.size(); j++)
@@ -70,13 +71,29 @@ public class vertex
 				{
 					int time = links[i][j];
 					int neighbor = j+1;
-					System.out.print("("+neighbor+","+time+"),");
+					result += "("+neighbor+","+time+"),";
 				}
 			}
-			System.out.print(")"+"\n");
+			System.out.print(result.substring(0, result.length() - 1)+")"+"\n");
 		}
 	}
+	public static void plusCourtChemin(int startIndex, int endIndex, ArrayList<vertex> vertex, int[][] links)
+	{
+		
+		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
+		for(int i = 1; i<= vertex.size(); i++)
+		{
+			vertexPathways.add(new vertexPath(i,Integer.MAX_VALUE,Integer.toString(i),false));
+		}
+		for (int j = 1; j<= vertex.size(); j++)
+		{
+			if(links[startIndex - 1][j - 1] != 0)
+				vertexPathways.get(j - 1).setTotalTime(links[startIndex - 1][j - 1]); //check get(j - 1) if does not return right array
+		}
+		
 	
+		
+	}
 	public static void makeAnotherChoice()
 	{
 		Scanner scanAnswer = new Scanner(System.in);
