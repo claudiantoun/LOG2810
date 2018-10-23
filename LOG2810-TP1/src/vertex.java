@@ -75,18 +75,28 @@ public class vertex
 	
 	public static void makeAnotherChoice()
 	{
-		System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 		Scanner scanAnswer = new Scanner(System.in);
 		String userAnswerInput = scanAnswer.nextLine();
 		
 		if(userAnswerInput.equalsIgnoreCase("oui"))
 		{
-			System.out.println("\n"+"Saisissez à nouveau un numéro du menu que vous voulez exécuter:");
+			System.out.println("------------------------------MENU------------------------------");
+			System.out.println("|   1-Mettre à jour la carte                                   |");
+			System.out.println("|   2-Déterminer le plus court chemin sécuritaire              |");
+			System.out.println("|   3-Extraire un sous-graphe                                  |");
+			System.out.println("|   4-Quitter                                                  |");
+			System.out.println("----------------------------------------------------------------");
+			System.out.println("Saisissez à nouveau un numéro du menu que vous voulez exécuter:");
 		}
 		else if(userAnswerInput.equalsIgnoreCase("non"))
 		{
 			System.out.println("\n"+"Vous avez quitté le programme!");
 			System.exit(0);
+		}
+		else
+		{
+			System.out.println("\n"+"Option invalide! Veuillez saisir oui ou non!");
+			makeAnotherChoice();
 		}
 	}
 	
@@ -121,15 +131,18 @@ public class vertex
 			{
 				case "1":	
 					System.out.println("Mettre à jour la carte");
+					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
 				case "2": 
 					System.out.println("Déterminer le plus court chemin sécuritaire");
+					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
 				case "3": 
 					System.out.println("\n"+"Entrer le sommet pour lequel vous voulez afficher le graphe (1 à 29):");
 					displayGraph(vertex);
+					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
 				case "4": 
