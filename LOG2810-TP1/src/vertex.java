@@ -85,15 +85,39 @@ public class vertex
 		{
 			vertexPathways.add(new vertexPath(i,Integer.MAX_VALUE,Integer.toString(i),false));
 		}
-		for (int j = 1; j<= vertex.size(); j++)
+		for (int j = 0; j< vertexPathways.size(); j++)
 		{
-			if(links[startIndex - 1][j - 1] != 0)
-				vertexPathways.get(j - 1).setTotalTime(links[startIndex - 1][j - 1]); //check get(j - 1) if does not return right array
+			if(links[startIndex - 1][j] != 0) {
+				vertexPathways.get(j).setTotalTime(links[startIndex - 1][j]); //check get(j - 1) if does not return right array
+				vertexPathways.get(j).setActualPath(Integer.toString(startIndex)+","+Integer.toString(j + 1));
+			}
 		}
+		vertexPathways.get(startIndex - 1).setVisited(true);
 		
-	
-		
+		while(vertexPathways.get(endIndex - 1).getVisited() != true) {
+			int shortestWay = -1;
+			int minTime = Integer.MAX_VALUE;
+			
+			for(int i = 0; i < vertexPathways.size(); i++) 
+			{
+				if(vertexPathways.get(i).getTotalTime() < minTime && vertexPathways.get(i).getVisited() != true) 
+				{
+					minTime = vertexPathways.get(i).getTotalTime();
+					shortestWay = vertexPathways.get(i).getId();
+				}
+			}
+			for(int j = 0; j < vertexPathways.size(); j++) 
+			{
+				if(links[shortestWay - 1][j] != 0 && vertexPathways.get(j).getVisited() != true) {
+					vertexPathways.get(j).setTotalTime(links[shortestWay - 1][j] + minTime); //check get(j - 1) if does not return right array
+					vertexPathways.get(j).setActualPath(vertexPathways.get(shortestWay - 1).getActualPath()+","+Integer.toString(j + 1));
+				}
+			}
+			vertexPathways.get(shortestWay - 1).setVisited(true);
+			System.out.print(vertexPathways.get(shortestWay - 1).getActualPath()+"\n");
+		}
 	}
+	
 	public static void makeAnotherChoice()
 	{
 		Scanner scanAnswer = new Scanner(System.in);
@@ -156,7 +180,7 @@ public class vertex
 					makeAnotherChoice();
 					break;
 				case "2": 
-					System.out.println("Déterminer le plus court chemin sécuritaire");
+					plusCourtChemin(5,10,vertex,links);
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;

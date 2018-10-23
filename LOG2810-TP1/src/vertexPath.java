@@ -15,8 +15,38 @@ public class vertexPath {
 		visited_ = visited;
 	}
 	
+	public int getId()
+	{
+		return id_;
+	}
+	
+	public int getTotalTime()
+	{
+		return totalTime_;
+	}
+	
 	public void setTotalTime(int totalTime)
 	{
 		totalTime_= totalTime;
+	}
+	
+	public boolean getVisited()
+	{
+		return visited_;
+	}
+	
+	public void setVisited(boolean visited)
+	{
+		visited_= visited;
+	}
+	
+	public String getActualPath()
+	{
+		return actualPath_;
+	}
+	
+	public void setActualPath(String actualPath)
+	{
+		actualPath_= actualPath;
 	}
 }
