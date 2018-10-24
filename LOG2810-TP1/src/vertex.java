@@ -12,13 +12,14 @@ public class vertex
 	
 	protected static int[][] links;
 	
+	// Constructeur par paramètres.
 	public vertex(int id, boolean hasRechargeStation) 
 	{
 		id_ = id;
 		hasRechargeStation_ = hasRechargeStation;
 	}
 	
-	//Méthode pour lire récursivement chaque ligne du fichier et traiter l'info
+	// Cette méthode permet de lire récursivement chaque ligne du fichier et traiter l'information.
 	public static void readVertex(BufferedReader br, ArrayList<vertex> vertex) throws IOException 
 	{   
 		String line;
@@ -39,11 +40,13 @@ public class vertex
 		}
 	}
 	
+	// BLABLALBA
 	public static void addVertexElement(ArrayList<vertex> vertex, String[] separated)
 	{
 		vertex.add(new vertex(Integer.parseInt(separated[0]), Boolean.parseBoolean(separated[1])));
 	}
 	
+	// BLABLABLA
 	public static void readLinkElements(BufferedReader br, int[][] links, String line) throws IOException 
 	{
 		while (line != null) 
@@ -58,7 +61,8 @@ public class vertex
 		}
 	}
 	
-	public static void readGraph(int[][] links, ArrayList<vertex> vertex)
+	// Cette méthode permet d'afficher le contenu de l'option 1 du menu.
+	public static void lireGraphe(int[][] links, ArrayList<vertex> vertex)
 	{
 		for(int i = 0; i < vertex.size(); i++)
 		{
@@ -77,24 +81,28 @@ public class vertex
 			System.out.print(result.substring(0, result.length() - 1)+")"+"\n");
 		}
 	}
+	
+	// Cette méthode permet d'afficher le contenu de l'option 2 du menu.
 	public static void plusCourtChemin(int startIndex, int endIndex, ArrayList<vertex> vertex, int[][] links)
 	{
 		
 		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
-		for(int i = 1; i<= vertex.size(); i++)
+		for(int i = 1; i <= vertex.size(); i++)
 		{
-			vertexPathways.add(new vertexPath(i,Integer.MAX_VALUE,Integer.toString(i),false));
+			vertexPathways.add(new vertexPath(i, Integer.MAX_VALUE, Integer.toString(i), false));
 		}
-		for (int j = 0; j< vertexPathways.size(); j++)
+		for (int j = 0; j < vertexPathways.size(); j++)
 		{
-			if(links[startIndex - 1][j] != 0) {
+			if(links[startIndex - 1][j] != 0) 
+			{
 				vertexPathways.get(j).setTotalTime(links[startIndex - 1][j]); //check get(j - 1) if does not return right array
 				vertexPathways.get(j).setActualPath(Integer.toString(startIndex)+","+Integer.toString(j + 1));
 			}
 		}
 		vertexPathways.get(startIndex - 1).setVisited(true);
 		
-		while(vertexPathways.get(endIndex - 1).getVisited() != true) {
+		while(vertexPathways.get(endIndex - 1).getVisited() != true) 
+		{
 			int shortestWay = -1;
 			int minTime = Integer.MAX_VALUE;
 			
@@ -118,6 +126,8 @@ public class vertex
 		}
 	}
 	
+	// Cette méthode permet de gérer la réponse de l'usager lorsqu'il lui est demandé s'il veut saisir
+	// une nouvelle option ou non.
 	public static void makeAnotherChoice()
 	{
 		Scanner scanAnswer = new Scanner(System.in);
@@ -145,18 +155,45 @@ public class vertex
 		}
 	}
 	
-//	public static void displayGraph(ArrayList<vertex> vertex)
-//	{
-//		Scanner scanReadGraph = new Scanner(System.in);
-//		int userInputReadGraph = scanReadGraph.nextInt();
-//		if(userInputReadGraph > vertex.size() || userInputReadGraph < 0) 
-//		{
-//			System.out.println("\n"+"Option invalide! Veuillez saisir une option entre 1 et 29!");
-//			displayGraph(vertex);
-//		}
-//		readGraph(userInputReadGraph, links, vertex);
-//	}
+	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
+	// précisement lors de la saisie de l'index de départ. De plus, elle appelle la méthode displayEndIndex.
+	public static void displayStartIndex(ArrayList<vertex> vertex, int[][] links)
+	{
+		System.out.println("\n"+"Veuillez saisir l'index de départ:");
+		Scanner scanStartIndex = new Scanner(System.in);
+		int userInputStartIndex = scanStartIndex.nextInt();
+		
+		if(userInputStartIndex > vertex.size() || userInputStartIndex < 0) 
+		{
+			System.out.println("\n"+"Option invalide! Veuillez saisir une option entre 1 et 29!");
+			displayStartIndex(vertex, links);
+		}
+		else
+		{
+			displayEndIndex(userInputStartIndex, vertex, links);
+		}
+	}
 	
+	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
+	// précisement lors de la saisie de l'index de fin. De plus, elle appelle la méthode plusCourtChemin.
+	public static void displayEndIndex(int userInputStartIndex, ArrayList<vertex> vertex, int[][] links)
+	{
+		System.out.println("\n"+"Veuillez maintenant saisir l'index de fin:");
+		Scanner scanEndIndex = new Scanner(System.in);
+		int userInputEndIndex = scanEndIndex.nextInt();
+		
+		if(userInputEndIndex > vertex.size() || userInputEndIndex < 0) 
+		{
+			System.out.println("\n"+"Option invalide! Veuillez saisir une option entre 1 et 29!");
+			displayEndIndex(userInputStartIndex, vertex, links);
+		}
+		else
+		{
+			plusCourtChemin(userInputStartIndex, userInputEndIndex, vertex, links);
+		}
+	}
+	
+	// Cette méthode affiche l'interface.
 	public static void displayMenu(ArrayList<vertex> vertex)
 	{
 		System.out.println("------------------------------MENU------------------------------");
@@ -165,7 +202,7 @@ public class vertex
 		System.out.println("|   3-Extraire un sous-graphe                                  |");
 		System.out.println("|   4-Quitter                                                  |");
 		System.out.println("----------------------------------------------------------------");
-		System.out.println("Saisissez le numéro du menu que vous voulez exécuter:       ");
+		System.out.println("Saisissez le numéro du menu que vous voulez exécuter:");
 		
 		boolean continueLoop = true;
 		while(continueLoop) 
@@ -175,18 +212,16 @@ public class vertex
 			switch(userInput)
 			{
 				case "1":	
-					readGraph(links, vertex);
+					lireGraphe(links, vertex);
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
-				case "2": 
-					plusCourtChemin(5,10,vertex,links);
+				case "2":
+					displayStartIndex(vertex, links);
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
 				case "3": 
-//					System.out.println("\n"+"Entrer le sommet pour lequel vous voulez afficher le graphe (1 à 29):");
-//					displayGraph(vertex);
 					System.out.println("Extraire un sous-graphe.");
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
