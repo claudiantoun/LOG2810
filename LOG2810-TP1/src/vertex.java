@@ -19,6 +19,9 @@ public class vertex
 		hasRechargeStation_ = hasRechargeStation;
 	}
 	
+	public boolean getHasRechargeStation() {
+		return hasRechargeStation_;
+	}
 	// Cette méthode permet de lire récursivement chaque ligne du fichier et traiter l'information.
 	public static void readVertex(BufferedReader br, ArrayList<vertex> vertex) throws IOException 
 	{   
@@ -83,10 +86,46 @@ public class vertex
 	}
 	
 	// Cette méthode permet d'afficher le contenu de l'option 2 du menu.
-	public static void plusCourtChemin(int startIndex, int endIndex, ArrayList<vertex> vertex, int[][] links)
+	public static void plusCourtChemin(int startIndex, int endIndex, ArrayList<vertex> vertex, int[][] links, String vehicleType, String transportationRisk)
 	{
-		
 		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
+		Vehicle vehicle = new Vehicle(vehicleType, transportationRisk, 100.0);
+		Double recharge = 0.0;
+		if(vehicle.getVehicleType() == "NI-NH") 
+		{
+			switch(transportationRisk) 
+			{
+			case "faible":	
+				vehicle.setDurability(6.0);
+				break;
+			case "moyen":
+				vehicle.setDurability(12.0);
+				break;
+			case "élevé": 
+				vehicle.setDurability(48.0);
+				break;
+			default:
+	           	break;
+			}
+		}
+		else
+		{
+			switch(transportationRisk) 
+			{
+			case "faible":	
+				vehicle.setDurability(5.0);
+				break;
+			case "moyen":
+				vehicle.setDurability(10.0);
+				break;
+			case "élevé": 
+				vehicle.setDurability(30.0);
+				break;
+			default:
+	           	break;
+			}
+		}
+		
 		for(int i = 1; i <= vertex.size(); i++)
 		{
 			vertexPathways.add(new vertexPath(i, Integer.MAX_VALUE, Integer.toString(i), false));
@@ -100,10 +139,10 @@ public class vertex
 			}
 		}
 		vertexPathways.get(startIndex - 1).setVisited(true);
-		
+		vertexPathways.get(startIndex - 1).setTotalTime(0);
 		while(vertexPathways.get(endIndex - 1).getVisited() != true) 
 		{
-			int shortestWay = -1;
+			int shortestWay = 0;
 			int minTime = Integer.MAX_VALUE;
 			
 			for(int i = 0; i < vertexPathways.size(); i++) 
@@ -114,16 +153,33 @@ public class vertex
 					shortestWay = vertexPathways.get(i).getId();
 				}
 			}
+			Double battery = (((1-(vertexPathways.get(shortestWay - 1).getTotalTime()/vehicle.getDurability()))*100.0)+recharge);
+			vehicle.setBatteryPercentage(battery);
 			for(int j = 0; j < vertexPathways.size(); j++) 
 			{
-				if(links[shortestWay - 1][j] != 0 && vertexPathways.get(j).getVisited() != true) {
+				if(links[shortestWay - 1][j] != 0 && vertexPathways.get(j).getVisited() != true && vertexPathways.get(j).getTotalTime() > links[shortestWay - 1][j] + minTime) {
 					vertexPathways.get(j).setTotalTime(links[shortestWay - 1][j] + minTime); //check get(j - 1) if does not return right array
 					vertexPathways.get(j).setActualPath(vertexPathways.get(shortestWay - 1).getActualPath()+","+Integer.toString(j + 1));
 				}
 			}
+			if(vehicle.getBatteryPercentage() < 20) {
+				String[] separated = vertexPathways.get(shortestWay - 1).getActualPath().split("\\,");
+				for(int i = separated.length - 2; i > 0; i--) 
+				{
+					if(vertex.get(Integer.parseInt(separated[i])-1).getHasRechargeStation() == true) 
+					{
+						plusCourtChemin(startIndex, Integer.parseInt(separated[i]), vertex, links, vehicleType, transportationRisk);
+						plusCourtChemin(Integer.parseInt(separated[i]), endIndex, vertex, links, vehicleType, transportationRisk);
+						recharge = (vertexPathways.get(Integer.parseInt(separated[i])-1).getTotalTime()/vehicle.getDurability())*100;
+					}
+				}
+			}
 			vertexPathways.get(shortestWay - 1).setVisited(true);
-			System.out.print(vertexPathways.get(shortestWay - 1).getActualPath()+"\n");
 		}
+		System.out.print(vertexPathways.get(endIndex - 1).getActualPath()+"\n");
+		System.out.print(vertexPathways.get(endIndex - 1).getTotalTime()+"\n");
+
+		System.out.print(Math.floor(vehicle.getBatteryPercentage())+"\n");
 	}
 	
 	// Cette méthode permet de gérer la réponse de l'usager lorsqu'il lui est demandé s'il veut saisir
@@ -189,7 +245,9 @@ public class vertex
 		}
 		else
 		{
-			plusCourtChemin(userInputStartIndex, userInputEndIndex, vertex, links);
+			String vehicleType = "NI-NH";
+			String transportationRisk = "élevé";
+			plusCourtChemin(userInputStartIndex, userInputEndIndex, vertex, links, vehicleType, transportationRisk);
 		}
 	}
 	
