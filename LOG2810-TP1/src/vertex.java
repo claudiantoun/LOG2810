@@ -8,18 +8,18 @@ public class vertex
 { 	
 	protected int id_;
 	
-	protected boolean hasRechargeStation_;
+	protected int hasRechargeStation_;
 	
 	protected static int[][] links;
 	
 	// Constructeur par paramètres.
-	public vertex(int id, boolean hasRechargeStation) 
+	public vertex(int id, int hasRechargeStation) 
 	{
 		id_ = id;
 		hasRechargeStation_ = hasRechargeStation;
 	}
 	
-	public boolean getHasRechargeStation() {
+	public int getHasRechargeStation() {
 		return hasRechargeStation_;
 	}
 	// Cette méthode permet de lire récursivement chaque ligne du fichier et traiter l'information.
@@ -32,7 +32,7 @@ public class vertex
 			String[] separated = line.split("\\,");
 			if(separated.length == 2) 
 			{
-				addVertexElement(vertex, separated);
+				vertex.add(new vertex(Integer.parseInt(separated[0]), Integer.parseInt(separated[1])));
 			}
 			else if(separated.length == 3) 
 			{
@@ -41,12 +41,6 @@ public class vertex
 			}
 			readVertex(br, vertex);
 		}
-	}
-	
-	// BLABLALBA
-	public static void addVertexElement(ArrayList<vertex> vertex, String[] separated)
-	{
-		vertex.add(new vertex(Integer.parseInt(separated[0]), Boolean.parseBoolean(separated[1])));
 	}
 	
 	// BLABLABLA
@@ -91,7 +85,8 @@ public class vertex
 		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
 		Vehicle vehicle = new Vehicle(vehicleType, transportationRisk, 100.0);
 		Double recharge = 0.0;
-		if(vehicle.getVehicleType() == "NI-NH") 
+		int tempsRecharge = 0;
+		if(vehicleType == "NI-NH") 
 		{
 			switch(transportationRisk) 
 			{
@@ -158,7 +153,7 @@ public class vertex
 			for(int j = 0; j < vertexPathways.size(); j++) 
 			{
 				if(links[shortestWay - 1][j] != 0 && vertexPathways.get(j).getVisited() != true && vertexPathways.get(j).getTotalTime() > links[shortestWay - 1][j] + minTime) {
-					vertexPathways.get(j).setTotalTime(links[shortestWay - 1][j] + minTime); //check get(j - 1) if does not return right array
+					vertexPathways.get(j).setTotalTime(links[shortestWay - 1][j] + minTime);
 					vertexPathways.get(j).setActualPath(vertexPathways.get(shortestWay - 1).getActualPath()+","+Integer.toString(j + 1));
 				}
 			}
@@ -166,20 +161,25 @@ public class vertex
 				String[] separated = vertexPathways.get(shortestWay - 1).getActualPath().split("\\,");
 				for(int i = separated.length - 2; i > 0; i--) 
 				{
-					if(vertex.get(Integer.parseInt(separated[i])-1).getHasRechargeStation() == true) 
+					if(vertex.get(Integer.parseInt(separated[i])-1).getHasRechargeStation() == 1) 
 					{
-						plusCourtChemin(startIndex, Integer.parseInt(separated[i]), vertex, links, vehicleType, transportationRisk);
-						plusCourtChemin(Integer.parseInt(separated[i]), endIndex, vertex, links, vehicleType, transportationRisk);
+						tempsRecharge += 120;
 						recharge = (vertexPathways.get(Integer.parseInt(separated[i])-1).getTotalTime()/vehicle.getDurability())*100;
+					
+					}
+					for(;;) {
+						
 					}
 				}
 			}
 			vertexPathways.get(shortestWay - 1).setVisited(true);
 		}
-		System.out.print(vertexPathways.get(endIndex - 1).getActualPath()+"\n");
-		System.out.print(vertexPathways.get(endIndex - 1).getTotalTime()+"\n");
-
-		System.out.print(Math.floor(vehicle.getBatteryPercentage())+"\n");
+		//afficher le chemin le plus court
+		System.out.print("véhicule utilisé : "+vehicle.getVehicleType()+"\n");
+		System.out.print(Math.floor(vehicle.getBatteryPercentage())+" % restant"+"\n");
+		System.out.print("chemin : ("+vertexPathways.get(endIndex - 1).getActualPath()+")"+"\n");
+		System.out.print((vertexPathways.get(endIndex - 1).getTotalTime()+tempsRecharge)+" minutes"+"\n");
+		
 	}
 	
 	// Cette méthode permet de gérer la réponse de l'usager lorsqu'il lui est demandé s'il veut saisir
@@ -253,17 +253,21 @@ public class vertex
 	// précisement lors de la saisie du choix du véhicule. De plus, elle appelle la méthode riskChoice.
 	public static void vehicleChoice(int userInputStartIndex, int userInputEndIndex, ArrayList<vertex> vertex, int[][] links)
 	{
-		System.out.println("\n"+"Veuillez saisir le type du véhicule désiré (NI-NH ou LI-ion):");
+		System.out.println("\n"+"Veuillez saisir le type du véhicule désiré (Entrez a pour choisir NI-NH ou b pour choisir LI-ion):");
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputVehicleType = scanAnswer.nextLine();
 		
-		if(userInputVehicleType.equalsIgnoreCase("NI-NH") || userInputVehicleType.equalsIgnoreCase("LI-ion"))
+		if(userInputVehicleType.equalsIgnoreCase("a") || userInputVehicleType.equalsIgnoreCase("b"))
 		{
-			riskChoice(userInputStartIndex, userInputEndIndex, userInputVehicleType, vertex, links);
+			riskChoice(userInputStartIndex, userInputEndIndex, "NI-NH", vertex, links);
+		}
+		else if(userInputVehicleType.equalsIgnoreCase("b"))
+		{
+			riskChoice(userInputStartIndex, userInputEndIndex, "LI-ion", vertex, links);
 		}
 		else
 		{
-			System.out.println("\n"+"Option invalide! Veuillez saisir NI-NH ou LI-ion!");
+			System.out.println("\n"+"Option invalide! Veuillez saisir a pour NI-NH ou b pour LI-ion!");
 			vehicleChoice(userInputStartIndex, userInputEndIndex, vertex, links);
 		}
 	}

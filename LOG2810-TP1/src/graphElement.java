@@ -5,25 +5,25 @@ import java.io.FileReader;
 
 public class graphElement extends vertex
 { 		
-	public graphElement(int id, boolean hasRechargeStation) 
+	public graphElement(int id, int hasRechargeStation) 
 	{		
 		//Eclipse autocompleted this constructor but we could use it to stack the vertex/links info.
 		super(id, hasRechargeStation);
 		// TODO Auto-generated constructor stub
 	}
 
-	private static String fileName_ = "../src/textFile/centresLocaux.txt";
+	private static String fileName_ = "textFile/centresLocaux.txt";
 	
 	// Cette méthode permet de lire le fichier texte des centres CLSC.
 	public static void main(String[] args) throws Exception 
 	{ 
 		File file = new File(fileName_); 
 		BufferedReader br = new BufferedReader(new FileReader(file)); 
-		ArrayList<vertex> vertex = new ArrayList<vertex>();
+		ArrayList<vertex> vertexList = new ArrayList<vertex>();
 		//ArrayList<Integer> links = new ArrayList<Integer>();
-		readVertex(br, vertex);
+		readVertex(br, vertexList);
 		int[][] vertexLinks = links;
 		
-		displayMenu(vertex);
+		displayMenu(vertexList);
 	}
 } 
