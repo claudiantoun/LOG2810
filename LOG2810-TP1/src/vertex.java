@@ -90,13 +90,13 @@ public class vertex
 		{
 			switch(transportationRisk) 
 			{
-			case "faible":	
+			case "a":	
 				vehicle.setDurability(6.0);
 				break;
-			case "moyen":
+			case "b":
 				vehicle.setDurability(12.0);
 				break;
-			case "élevé": 
+			case "c": 
 				vehicle.setDurability(48.0);
 				break;
 			default:
@@ -107,13 +107,13 @@ public class vertex
 		{
 			switch(transportationRisk) 
 			{
-			case "faible":	
+			case "a":	
 				vehicle.setDurability(5.0);
 				break;
-			case "moyen":
+			case "b":
 				vehicle.setDurability(10.0);
 				break;
-			case "élevé": 
+			case "c": 
 				vehicle.setDurability(30.0);
 				break;
 			default:
@@ -253,11 +253,13 @@ public class vertex
 	// précisement lors de la saisie du choix du véhicule. De plus, elle appelle la méthode riskChoice.
 	public static void vehicleChoice(int userInputStartIndex, int userInputEndIndex, ArrayList<vertex> vertex, int[][] links)
 	{
-		System.out.println("\n"+"Veuillez saisir le type du véhicule désiré (Entrez a pour choisir NI-NH ou b pour choisir LI-ion):");
+		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au type de véhicule désiré:");
+		System.out.println("(a) Véhicule avec une batterie à NI-NH");
+		System.out.println("(b) Véhicule avec une batterie à LI-ion");
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputVehicleType = scanAnswer.nextLine();
 		
-		if(userInputVehicleType.equalsIgnoreCase("a") || userInputVehicleType.equalsIgnoreCase("b"))
+		if(userInputVehicleType.equalsIgnoreCase("a"))
 		{
 			riskChoice(userInputStartIndex, userInputEndIndex, "NI-NH", vertex, links);
 		}
@@ -267,7 +269,7 @@ public class vertex
 		}
 		else
 		{
-			System.out.println("\n"+"Option invalide! Veuillez saisir a pour NI-NH ou b pour LI-ion!");
+			System.out.println("\n"+"Option invalide! Veuillez saisir (a) ou (b)!");
 			vehicleChoice(userInputStartIndex, userInputEndIndex, vertex, links);
 		}
 	}
@@ -276,17 +278,20 @@ public class vertex
 	// précisement lors de la saisie du facteur de risque. De plus, elle appelle la méthode plusCourtChemin.
 	public static void riskChoice(int userInputStartIndex, int userInputEndIndex, String userInputVehicleType, ArrayList<vertex> vertex, int[][] links)
 	{
-		System.out.println("\n"+"Veuillez saisir le risque de transportation (faible, moyen ou élevé):");
+		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au risque de transportation:");
+		System.out.println("(a) Faible");
+		System.out.println("(b) Moyen");
+		System.out.println("(c) Élevé");
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputTransportationRisk = scanAnswer.nextLine();
 		
-		if(userInputTransportationRisk.equalsIgnoreCase("faible") || userInputTransportationRisk.equalsIgnoreCase("moyen") || userInputTransportationRisk.equalsIgnoreCase("élevé"))
+		if(userInputTransportationRisk.equalsIgnoreCase("a") || userInputTransportationRisk.equalsIgnoreCase("b") || userInputTransportationRisk.equalsIgnoreCase("c"))
 		{
 			plusCourtChemin(userInputStartIndex, userInputEndIndex, vertex, links, userInputVehicleType, userInputTransportationRisk);
 		}
 		else
 		{
-			System.out.println("\n"+"Option invalide! Veuillez saisir faible, moyen ou élevé!");
+			System.out.println("\n"+"Option invalide! Veuillez saisir (a), (b) ou (c)!");
 			riskChoice(userInputStartIndex, userInputEndIndex, userInputVehicleType, vertex, links);
 		}
 	}
