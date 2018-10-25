@@ -19,9 +19,12 @@ public class vertex
 		hasRechargeStation_ = hasRechargeStation;
 	}
 	
-	public int getHasRechargeStation() {
+	// Cette méthode retourne un bool hasRechargeStation.
+	public int getHasRechargeStation() 
+	{
 		return hasRechargeStation_;
 	}
+	
 	// Cette méthode permet de lire récursivement chaque ligne du fichier et traiter l'information.
 	public static void readVertex(BufferedReader br, ArrayList<vertex> vertex) throws IOException 
 	{   
@@ -43,7 +46,7 @@ public class vertex
 		}
 	}
 	
-	// BLABLABLA
+	// Cette méthode permet de séparer le contenu lu dans chaque ligne du fichier en items individuels.
 	public static void readLinkElements(BufferedReader br, int[][] links, String line) throws IOException 
 	{
 		while (line != null) 
@@ -127,7 +130,7 @@ public class vertex
 		{
 			if(links[startIndex - 1][j] != 0) 
 			{
-				vertexPathways.get(j).setTotalTime(links[startIndex - 1][j]); //check get(j - 1) if does not return right array
+				vertexPathways.get(j).setTotalTime(links[startIndex - 1][j]);
 				vertexPathways.get(j).setActualPath(Integer.toString(startIndex)+","+Integer.toString(j + 1));
 			}
 		}
@@ -170,8 +173,9 @@ public class vertex
 						return;
 					}
 				}
-				//aller voir les voisins des Nodes du chemin
-				for(int i = separated.length - 3; i > 0; i--) {
+				// Voir les voisins des Nodes du chemin.
+				for(int i = separated.length - 3; i > 0; i--) 
+				{
 					for(int j = 0; j < vertex.size(); j++) 
 					{
 						if(links[Integer.parseInt(separated[i])-1][j] != 0 && vertex.get(j).getHasRechargeStation() == 1) 
@@ -189,11 +193,13 @@ public class vertex
 			}
 			vertexPathways.get(shortestWay - 1).setVisited(true);
 		}
-		//afficher le chemin le plus court
-		System.out.print("véhicule utilisé : "+vehicle.getVehicleType()+"\n");
-		System.out.print(Math.floor(vehicle.getBatteryPercentage())+" % restant"+"\n");
-		System.out.print("chemin : ("+vertexPathways.get(endIndex - 1).getActualPath()+")"+"\n");
-		System.out.print((vertexPathways.get(endIndex - 1).getTotalTime()+tempsRecharge)+" minutes"+"\n");
+		// Afficher le chemin le plus court.
+		System.out.println("\n"+"-----------------------------RÉSULTAT----------------------------");
+		System.out.println("   1) Véhicule utilisé : " + vehicle.getVehicleType());
+		System.out.println("   2) Batterie : "+Math.floor(vehicle.getBatteryPercentage())+" % restant");
+		System.out.println("   3) Chemin : ("+vertexPathways.get(endIndex - 1).getActualPath()+")");
+		System.out.println("   4) Temps de déplacement : "+(vertexPathways.get(endIndex - 1).getTotalTime()+tempsRecharge)+" minutes");
+		System.out.println("-----------------------------------------------------------------");
 	}
 	
 	// Cette méthode permet de gérer la réponse de l'usager lorsqu'il lui est demandé s'il veut saisir

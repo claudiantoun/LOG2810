@@ -4,7 +4,7 @@ public class vertexPath
 	private boolean visited_;
 	private int id_;
 	private int totalTime_;
-	private String actualPath_;    //"1,4,3,10"
+	private String actualPath_;
 	
 	public vertexPath(int id, int totalTime, String actualPath, boolean visited)
 	{

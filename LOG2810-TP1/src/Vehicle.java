@@ -1,40 +1,46 @@
 
-public class Vehicle {
-
+public class Vehicle 
+{
 	private static String vehicleType_;
 	private static String transportationRisk_;
 	private Double batteryPercentage_;
 	private Double durability_;
 	
-	public Vehicle(String vehicleType, String transportationRisk, Double batteryPercentage) {
-		
+	public Vehicle(String vehicleType, String transportationRisk, Double batteryPercentage) 
+	{
 		vehicleType_ = vehicleType;
 		transportationRisk_ = transportationRisk;
 		batteryPercentage_ = batteryPercentage;
 		durability_ = 0.0;
 	}
 	
-	public String getVehicleType() {
+	public String getVehicleType() 
+	{
 		return vehicleType_;
 	}
 	
-	public String getTransportationRisk() {
+	public String getTransportationRisk() 
+	{
 		return transportationRisk_;
 	}
 	
-	public double getBatteryPercentage() {
+	public double getBatteryPercentage() 
+	{
 		return batteryPercentage_;
 	}
 	
-	public void setBatteryPercentage(Double batteryPercentage) {
+	public void setBatteryPercentage(Double batteryPercentage) 
+	{
 		batteryPercentage_ = batteryPercentage;
 	}
 	
-	public Double getDurability() {
+	public Double getDurability() 
+	{
 		return durability_;
 	}
 	
-	public void setDurability(Double percentage) {
+	public void setDurability(Double percentage) 
+	{
 		durability_ = 60/percentage*100;
 	}
 }
