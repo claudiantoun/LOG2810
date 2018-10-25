@@ -257,7 +257,7 @@ public class vertex
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputVehicleType = scanAnswer.nextLine();
 		
-		if(userInputVehicleType.equalsIgnoreCase("NI-NH") || userInputVehicleType.equalsIgnoreCase("LI-ion") || userInputVehicleType.equalsIgnoreCase("li-ion") || userInputVehicleType.equalsIgnoreCase("ni-nh"))
+		if(userInputVehicleType.equalsIgnoreCase("NI-NH") || userInputVehicleType.equalsIgnoreCase("LI-ion"))
 		{
 			riskChoice(userInputStartIndex, userInputEndIndex, userInputVehicleType, vertex, links);
 		}
@@ -276,7 +276,7 @@ public class vertex
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputTransportationRisk = scanAnswer.nextLine();
 		
-		if(userInputTransportationRisk.equalsIgnoreCase("faible") || userInputTransportationRisk.equalsIgnoreCase("moyen") || userInputTransportationRisk.equalsIgnoreCase("élevé") || userInputTransportationRisk.equalsIgnoreCase("eleve"))
+		if(userInputTransportationRisk.equalsIgnoreCase("faible") || userInputTransportationRisk.equalsIgnoreCase("moyen") || userInputTransportationRisk.equalsIgnoreCase("élevé"))
 		{
 			plusCourtChemin(userInputStartIndex, userInputEndIndex, vertex, links, userInputVehicleType, userInputTransportationRisk);
 		}
