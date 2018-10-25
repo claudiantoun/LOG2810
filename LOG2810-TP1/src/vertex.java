@@ -80,12 +80,10 @@ public class vertex
 	}
 	
 	// Cette méthode permet d'afficher le contenu de l'option 2 du menu.
-	public static void plusCourtChemin(int startIndex, int endIndex, ArrayList<vertex> vertex, int[][] links, String vehicleType, String transportationRisk)
+	public static void plusCourtChemin(int startIndex, int endIndex, ArrayList<vertex> vertex, int[][] links, String vehicleType, String transportationRisk, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
 		Vehicle vehicle = new Vehicle(vehicleType, transportationRisk, 100.0);
-		Double recharge = 0.0;
-		int tempsRecharge = 0;
 		if(vehicleType == "NI-NH") 
 		{
 			switch(transportationRisk) 
@@ -153,7 +151,10 @@ public class vertex
 			for(int j = 0; j < vertexPathways.size(); j++) 
 			{
 				if(links[shortestWay - 1][j] != 0 && vertexPathways.get(j).getVisited() != true && vertexPathways.get(j).getTotalTime() > links[shortestWay - 1][j] + minTime) {
-					vertexPathways.get(j).setTotalTime(links[shortestWay - 1][j] + minTime);
+					if(j == goToRechargeIndex)
+						vertexPathways.get(j).setTotalTime(0);
+					else
+						vertexPathways.get(j).setTotalTime(links[shortestWay - 1][j] + minTime);
 					vertexPathways.get(j).setActualPath(vertexPathways.get(shortestWay - 1).getActualPath()+","+Integer.toString(j + 1));
 				}
 			}
@@ -163,14 +164,28 @@ public class vertex
 				{
 					if(vertex.get(Integer.parseInt(separated[i])-1).getHasRechargeStation() == 1) 
 					{
-						tempsRecharge += 120;
-						recharge = (vertexPathways.get(Integer.parseInt(separated[i])-1).getTotalTime()/vehicle.getDurability())*100;
-					
-					}
-					for(;;) {
-						
+						tempsRecharge = 120;
+						recharge += (vertexPathways.get(Integer.parseInt(separated[i])-1).getTotalTime()/vehicle.getDurability())*100;
+						plusCourtChemin(startIndex, endIndex, vertex, links, vehicleType, transportationRisk, recharge, tempsRecharge, goToRechargeIndex);
+						return;
 					}
 				}
+				//aller voir les voisins des Nodes du chemin
+				for(int i = separated.length - 3; i > 0; i--) {
+					for(int j = 0; j < vertex.size(); j++) 
+					{
+						if(links[Integer.parseInt(separated[i])-1][j] != 0 && vertex.get(j).getHasRechargeStation() == 1) 
+						{
+							tempsRecharge = 120 + vertexPathways.get(j).getTotalTime(); 
+							recharge += (vertexPathways.get(j).getTotalTime()/vehicle.getDurability())*100;
+							goToRechargeIndex = j;
+							plusCourtChemin(startIndex, endIndex, vertex, links, vehicleType, transportationRisk, recharge, tempsRecharge, goToRechargeIndex);
+							return;
+						}
+					}
+				}
+				System.out.println("\n"+"Désolé, le transport a été refusé!");
+				return;
 			}
 			vertexPathways.get(shortestWay - 1).setVisited(true);
 		}
@@ -179,7 +194,6 @@ public class vertex
 		System.out.print(Math.floor(vehicle.getBatteryPercentage())+" % restant"+"\n");
 		System.out.print("chemin : ("+vertexPathways.get(endIndex - 1).getActualPath()+")"+"\n");
 		System.out.print((vertexPathways.get(endIndex - 1).getTotalTime()+tempsRecharge)+" minutes"+"\n");
-		
 	}
 	
 	// Cette méthode permet de gérer la réponse de l'usager lorsqu'il lui est demandé s'il veut saisir
@@ -213,7 +227,7 @@ public class vertex
 	
 	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
 	// précisement lors de la saisie de l'index de départ. De plus, elle appelle la méthode displayEndIndex.
-	public static void displayStartIndex(ArrayList<vertex> vertex, int[][] links)
+	public static void displayStartIndex(ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"Veuillez saisir l'index de départ:");
 		Scanner scanStartIndex = new Scanner(System.in);
@@ -222,17 +236,17 @@ public class vertex
 		if(userInputStartIndex > vertex.size() || userInputStartIndex < 0) 
 		{
 			System.out.println("\n"+"Option invalide! Veuillez saisir une option entre 1 et 29!");
-			displayStartIndex(vertex, links);
+			displayStartIndex(vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 		else
 		{
-			displayEndIndex(userInputStartIndex, vertex, links);
+			displayEndIndex(userInputStartIndex, vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 	}
 	
 	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
 	// précisement lors de la saisie de l'index de fin. De plus, elle appelle la méthode vehicleChoice.
-	public static void displayEndIndex(int userInputStartIndex, ArrayList<vertex> vertex, int[][] links)
+	public static void displayEndIndex(int userInputStartIndex, ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"Veuillez maintenant saisir l'index de fin:");
 		Scanner scanEndIndex = new Scanner(System.in);
@@ -241,17 +255,17 @@ public class vertex
 		if(userInputEndIndex > vertex.size() || userInputEndIndex < 0) 
 		{
 			System.out.println("\n"+"Option invalide! Veuillez saisir une option entre 1 et 29!");
-			displayEndIndex(userInputStartIndex, vertex, links);
+			displayEndIndex(userInputStartIndex, vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 		else
 		{
-			vehicleChoice(userInputStartIndex, userInputEndIndex, vertex, links);
+			vehicleChoice(userInputStartIndex, userInputEndIndex, vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 	}
 	
 	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
 	// précisement lors de la saisie du choix du véhicule. De plus, elle appelle la méthode riskChoice.
-	public static void vehicleChoice(int userInputStartIndex, int userInputEndIndex, ArrayList<vertex> vertex, int[][] links)
+	public static void vehicleChoice(int userInputStartIndex, int userInputEndIndex, ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au type de véhicule désiré:");
 		System.out.println("(a) Véhicule avec une batterie à NI-NH");
@@ -261,22 +275,22 @@ public class vertex
 		
 		if(userInputVehicleType.equalsIgnoreCase("a"))
 		{
-			riskChoice(userInputStartIndex, userInputEndIndex, "NI-NH", vertex, links);
+			riskChoice(userInputStartIndex, userInputEndIndex, "NI-NH", vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 		else if(userInputVehicleType.equalsIgnoreCase("b"))
 		{
-			riskChoice(userInputStartIndex, userInputEndIndex, "LI-ion", vertex, links);
+			riskChoice(userInputStartIndex, userInputEndIndex, "LI-ion", vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 		else
 		{
 			System.out.println("\n"+"Option invalide! Veuillez saisir (a) ou (b)!");
-			vehicleChoice(userInputStartIndex, userInputEndIndex, vertex, links);
+			vehicleChoice(userInputStartIndex, userInputEndIndex, vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 	}
 	
 	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
 	// précisement lors de la saisie du facteur de risque. De plus, elle appelle la méthode plusCourtChemin.
-	public static void riskChoice(int userInputStartIndex, int userInputEndIndex, String userInputVehicleType, ArrayList<vertex> vertex, int[][] links)
+	public static void riskChoice(int userInputStartIndex, int userInputEndIndex, String userInputVehicleType, ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au risque de transportation:");
 		System.out.println("(a) Faible");
@@ -287,17 +301,17 @@ public class vertex
 		
 		if(userInputTransportationRisk.equalsIgnoreCase("a") || userInputTransportationRisk.equalsIgnoreCase("b") || userInputTransportationRisk.equalsIgnoreCase("c"))
 		{
-			plusCourtChemin(userInputStartIndex, userInputEndIndex, vertex, links, userInputVehicleType, userInputTransportationRisk);
+			plusCourtChemin(userInputStartIndex, userInputEndIndex, vertex, links, userInputVehicleType, userInputTransportationRisk, recharge, tempsRecharge, goToRechargeIndex);
 		}
 		else
 		{
 			System.out.println("\n"+"Option invalide! Veuillez saisir (a), (b) ou (c)!");
-			riskChoice(userInputStartIndex, userInputEndIndex, userInputVehicleType, vertex, links);
+			riskChoice(userInputStartIndex, userInputEndIndex, userInputVehicleType, vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 	}
 	
 	// Cette méthode affiche l'interface.
-	public static void displayMenu(ArrayList<vertex> vertex)
+	public static void displayMenu(ArrayList<vertex> vertex, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("------------------------------MENU------------------------------");
 		System.out.println("|   1-Mettre à jour la carte                                   |");
@@ -320,7 +334,7 @@ public class vertex
 					makeAnotherChoice();
 					break;
 				case "2":
-					displayStartIndex(vertex, links);
+					displayStartIndex(vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;

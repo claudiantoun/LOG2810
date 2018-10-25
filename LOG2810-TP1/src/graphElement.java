@@ -12,7 +12,7 @@ public class graphElement extends vertex
 		// TODO Auto-generated constructor stub
 	}
 
-	private static String fileName_ = "./src/textFile/centresLocaux.txt";
+	private static String fileName_ = "textFile/centresLocaux.txt";
 	
 	// Cette méthode permet de lire le fichier texte des centres CLSC.
 	public static void main(String[] args) throws Exception 
@@ -23,7 +23,9 @@ public class graphElement extends vertex
 		//ArrayList<Integer> links = new ArrayList<Integer>();
 		readVertex(br, vertexList);
 		int[][] vertexLinks = links;
-		
-		displayMenu(vertexList);
+		Double recharge = 0.0;
+		int tempsRecharge = 0;
+		int goToRechargeIndex = -1;
+		displayMenu(vertexList, recharge, tempsRecharge, goToRechargeIndex);
 	}
 } 
