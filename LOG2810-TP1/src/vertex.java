@@ -64,6 +64,7 @@ public class vertex
 	// Cette méthode permet d'afficher le contenu de l'option 1 du menu.
 	public static void lireGraphe(int[][] links, ArrayList<vertex> vertex)
 	{
+		System.out.print("\n");
 		for(int i = 0; i < vertex.size(); i++)
 		{
 			String result = "";
@@ -188,7 +189,9 @@ public class vertex
 						}
 					}
 				}
-				System.out.println("\n"+"Désolé, le transport a été refusé!");
+				System.out.println("\n"+"-----------------------------RÉSULTAT----------------------------");
+				System.out.println("Désolé, le transport a été refusé!");
+				System.out.println("-----------------------------------------------------------------");
 				return;
 			}
 			vertexPathways.get(shortestWay - 1).setVisited(true);
@@ -211,7 +214,7 @@ public class vertex
 		
 		if(userAnswerInput.equalsIgnoreCase("oui"))
 		{
-			System.out.println("------------------------------MENU------------------------------");
+			System.out.println("\n"+"------------------------------MENU------------------------------");
 			System.out.println("|   1-Mettre à jour la carte                                   |");
 			System.out.println("|   2-Déterminer le plus court chemin sécuritaire              |");
 			System.out.println("|   3-Extraire un sous-graphe                                  |");
@@ -319,7 +322,7 @@ public class vertex
 	// Cette méthode affiche l'interface.
 	public static void displayMenu(ArrayList<vertex> vertex, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
-		System.out.println("------------------------------MENU------------------------------");
+		System.out.println("\n"+"------------------------------MENU------------------------------");
 		System.out.println("|   1-Mettre à jour la carte                                   |");
 		System.out.println("|   2-Déterminer le plus court chemin sécuritaire              |");
 		System.out.println("|   3-Extraire un sous-graphe                                  |");

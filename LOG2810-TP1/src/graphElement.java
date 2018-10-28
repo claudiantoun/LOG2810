@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 
 public class graphElement extends vertex
-{ 	
-	private static String fileName_ = "src/centresLocaux.txt";
-	
+{ 		
 	// Constructeur par paramètres.
 	public graphElement(int id, int hasRechargeStation) 
 	{		
@@ -16,7 +14,10 @@ public class graphElement extends vertex
 	// Cette méthode permet de lire le fichier texte des centres CLSC.
 	public static void main(String[] args) throws Exception 
 	{ 
-		File file = new File(fileName_); 
+		System.out.println("Veuillez entrer le chemin complet du fichier à lire avec son extension (src/centresLocaux.txt, par exemple): ");
+		Scanner scan = new Scanner(System.in);
+		String userInputFileName = scan.nextLine();
+		File file = new File(userInputFileName); 
 		BufferedReader br = new BufferedReader(new FileReader(file)); 
 		ArrayList<vertex> vertexList = new ArrayList<vertex>();
 		readVertex(br, vertexList);
