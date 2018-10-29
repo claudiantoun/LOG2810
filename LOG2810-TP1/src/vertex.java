@@ -150,8 +150,6 @@ public class vertex
 					shortestWay = vertexPathways.get(i).getId();
 				}
 			}
-			//Double battery = (((1-(vertexPathways.get(shortestWay - 1).getTotalTime()/vehicle.getDurability()))*100.0)+recharge);
-			//vehicle.setBatteryPercentage(battery);
 			for(int j = 0; j < vertexPathways.size(); j++) 
 			{
 				if(links[shortestWay - 1][j] != 0 && vertexPathways.get(j).getVisited() != true && vertexPathways.get(j).getTotalTime() > links[shortestWay - 1][j] + minTime) {
@@ -162,38 +160,6 @@ public class vertex
 					vertexPathways.get(j).setActualPath(vertexPathways.get(shortestWay - 1).getActualPath()+","+Integer.toString(j + 1));
 				}
 			}
-			/*if(vehicle.getBatteryPercentage() < 20) {
-				String[] separated = vertexPathways.get(shortestWay - 1).getActualPath().split("\\,");
-				for(int i = separated.length - 2; i > 0; i--) 
-				{
-					if(vertex.get(Integer.parseInt(separated[i])-1).getHasRechargeStation() == 1) 
-					{
-						tempsRecharge = 120;
-						recharge += (vertexPathways.get(Integer.parseInt(separated[i])-1).getTotalTime()/vehicle.getDurability())*100;
-						plusCourtChemin(startIndex, endIndex, vertex, links, vehicleType, transportationRisk, recharge, tempsRecharge, goToRechargeIndex);
-						return;
-					}
-				}
-				// Voir les voisins des Nodes du chemin.
-				for(int i = separated.length - 3; i > 0; i--) 
-				{
-					for(int j = 0; j < vertex.size(); j++) 
-					{
-						if(links[Integer.parseInt(separated[i])-1][j] != 0 && vertex.get(j).getHasRechargeStation() == 1) 
-						{
-							tempsRecharge = 120 + vertexPathways.get(j).getTotalTime(); 
-							recharge += (vertexPathways.get(j).getTotalTime()/vehicle.getDurability())*100;
-							goToRechargeIndex = j;
-							plusCourtChemin(startIndex, endIndex, vertex, links, vehicleType, transportationRisk, recharge, tempsRecharge, goToRechargeIndex);
-							return;
-						}
-					}
-				}
-				System.out.println("\n"+"-----------------------------RÉSULTAT----------------------------");
-				System.out.println("Désolé, le transport a été refusé!");
-				System.out.println("-----------------------------------------------------------------");
-				return;
-			}*/
 			vertexPathways.get(shortestWay - 1).setVisited(true);
 		}
 		Double battery = (((1-(vertexPathways.get(endIndex - 1).getTotalTime()/vehicle.getDurability()))*100.0)+recharge);
