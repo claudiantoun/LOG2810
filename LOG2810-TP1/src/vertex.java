@@ -88,7 +88,7 @@ public class vertex
 	{
 		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
 		Vehicle vehicle = new Vehicle(vehicleType, transportationRisk, 100.0);
-		if(vehicleType == "NI-NH") 
+		if(vehicleType == "NI-MH") 
 		{
 			switch(transportationRisk) 
 			{
@@ -279,14 +279,14 @@ public class vertex
 	public static void vehicleChoice(int userInputStartIndex, int userInputEndIndex, ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au type de véhicule désiré:");
-		System.out.println("(a) Véhicule avec une batterie à NI-NH");
+		System.out.println("(a) Véhicule avec une batterie à NI-MH");
 		System.out.println("(b) Véhicule avec une batterie à LI-ion");
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputVehicleType = scanAnswer.nextLine();
 		
 		if(userInputVehicleType.equalsIgnoreCase("a"))
 		{
-			riskChoice(userInputStartIndex, userInputEndIndex, "NI-NH", vertex, links, recharge, tempsRecharge, goToRechargeIndex);
+			riskChoice(userInputStartIndex, userInputEndIndex, "NI-MH", vertex, links, recharge, tempsRecharge, goToRechargeIndex);
 		}
 		else if(userInputVehicleType.equalsIgnoreCase("b"))
 		{
