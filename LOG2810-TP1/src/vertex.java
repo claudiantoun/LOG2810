@@ -12,20 +12,20 @@ public class vertex
 	
 	protected static int[][] links;
 	
-	// Constructeur par paramètres.
+	// Constructeur par paramï¿½tres.
 	public vertex(int id, int hasRechargeStation) 
 	{
 		id_ = id;
 		hasRechargeStation_ = hasRechargeStation;
 	}
 	
-	// Cette méthode retourne un bool hasRechargeStation.
+	// Cette mï¿½thode retourne un bool hasRechargeStation.
 	public int getHasRechargeStation() 
 	{
 		return hasRechargeStation_;
 	}
 	
-	// Cette méthode permet de lire récursivement chaque ligne du fichier et traiter l'information.
+	// Cette mï¿½thode permet de lire rï¿½cursivement chaque ligne du fichier et traiter l'information.
 	public static void readVertex(BufferedReader br, ArrayList<vertex> vertex) throws IOException 
 	{   
 		String line;
@@ -46,7 +46,7 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode permet de séparer le contenu lu dans chaque ligne du fichier en items individuels.
+	// Cette mï¿½thode permet de sï¿½parer le contenu lu dans chaque ligne du fichier en items individuels.
 	public static void readLinkElements(BufferedReader br, int[][] links, String line) throws IOException 
 	{
 		while (line != null) 
@@ -61,7 +61,7 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode permet d'afficher le contenu de l'option 1 du menu.
+	// Cette mï¿½thode permet d'afficher le contenu de l'option 1 du menu.
 	public static void lireGraphe(int[][] links, ArrayList<vertex> vertex)
 	{
 		System.out.print("\n");
@@ -83,7 +83,7 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode permet d'afficher le contenu de l'option 2 du menu.
+	// Cette mï¿½thode permet d'afficher le contenu de l'option 2 du menu.
 	public static void plusCourtChemin(int startIndex, int endIndex, ArrayList<vertex> vertex, int[][] links, String vehicleType, String transportationRisk, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
@@ -165,7 +165,7 @@ public class vertex
 		Double battery = (((1-(vertexPathways.get(endIndex - 1).getTotalTime()/vehicle.getDurability()))*100.0)+recharge);
 		vehicle.setBatteryPercentage(battery);
 		
-		if(vehicle.getBatteryPercentage() < 20) {
+		if(vehicle.getBatteryPercentage() < 0) {
 			String[] separated = vertexPathways.get(endIndex - 1).getActualPath().split("\\,");
 			for(int i = separated.length - 2; i > 0; i--) 
 			{
@@ -193,21 +193,113 @@ public class vertex
 				}
 			}
 			
-		System.out.println("\n"+"-----------------------------RÉSULTAT----------------------------");
-		System.out.println("Désolé, le transport a été refusé!");
+		System.out.println("\n"+"-----------------------------Rï¿½SULTAT----------------------------");
+		System.out.println("Dï¿½solï¿½, le transport a ï¿½tï¿½ refusï¿½!");
 		System.out.println("-----------------------------------------------------------------");
 		return;
 		}
 		// Afficher le chemin le plus court.
-		System.out.println("\n"+"-----------------------------RÉSULTAT----------------------------");
-		System.out.println("   1) Véhicule utilisé : " + vehicle.getVehicleType());
+		System.out.println("\n"+"-----------------------------Rï¿½SULTAT----------------------------");
+		System.out.println("   1) Vï¿½hicule utilisï¿½ : " + vehicle.getVehicleType());
 		System.out.println("   2) Batterie : "+Math.floor(vehicle.getBatteryPercentage())+" % restant");
 		System.out.println("   3) Chemin : ("+vertexPathways.get(endIndex - 1).getActualPath()+")");
-		System.out.println("   4) Temps de déplacement : "+(vertexPathways.get(endIndex - 1).getTotalTime()+tempsRecharge)+" minutes");
+		System.out.println("   4) Temps de dï¿½placement : "+(vertexPathways.get(endIndex - 1).getTotalTime()+tempsRecharge)+" minutes");
 		System.out.println("-----------------------------------------------------------------");
 	}
 	
-	// Cette méthode permet de gérer la réponse de l'usager lorsqu'il lui est demandé s'il veut saisir
+	public static void extraireGraphe(int startIndex, ArrayList<vertex> vertex, int[][] links, String vehicleType, String transportationRisk)
+	{
+		ArrayList<vertexPath> vertexPathways = new ArrayList<vertexPath>();
+		ArrayList<vertexPath> vertexLongPathways = new ArrayList<vertexPath>();
+		Vehicle vehicle = new Vehicle(vehicleType, transportationRisk, 100.0);
+		if(vehicleType == "NI-MH") 
+		{
+			switch(transportationRisk) 
+			{
+			case "a":
+				vehicle.setDurability(6.0);
+				break;
+			case "b":
+				vehicle.setDurability(12.0);
+				break;
+			case "c": 
+				vehicle.setDurability(48.0);  //real percentage: 48.0
+				break;
+			default:
+	           	break;
+			}
+		}
+		else
+		{
+			switch(transportationRisk) 
+			{
+			case "a":
+				vehicle.setDurability(5.0);
+				break;
+			case "b":
+				vehicle.setDurability(10.0);
+				break;
+			case "c": 
+				vehicle.setDurability(30.0);
+				break;
+			default:
+	           	break;
+			}
+		}
+		
+		for(int i = 1; i <= vertex.size(); i++)
+		{
+			vertexPathways.add(new vertexPath(i, Integer.MAX_VALUE, Integer.toString(i), false));
+		}
+		
+		vertexPathways.get(startIndex-1).setTotalTime(0);
+		setVertexPathways(startIndex, links, vertexPathways, vertexLongPathways, vehicle);
+		
+		System.out.println(vehicle.getLongestPath());
+		System.out.println(vehicle.getLongestTime());
+	}
+	
+	
+	public static void setVertexPathways(int startIndex, int[][] links, ArrayList<vertexPath> vertexPathways, ArrayList<vertexPath> vertexLongPathways, Vehicle vehicle)
+	{
+		boolean allNodes = true;
+		for (int j = 0; j < vertexPathways.size(); j++)
+		{
+			if(links[startIndex - 1][j] != 0 && vertexPathways.get(j).getVisited() == false) 
+			{
+				allNodes = false;
+				vertexPathways.get(j).setTotalTime(links[startIndex - 1][j]+vertexPathways.get(startIndex-1).getTotalTime());
+				vertexPathways.get(j).setActualPath(vertexPathways.get(startIndex-1).getActualPath()+","+Integer.toString(j + 1));
+				if (vertexPathways.get(j).getTotalTime() <= vehicle.getDurability())
+				{
+					vertexPathways.get(startIndex - 1).setVisited(true);
+					setVertexPathways(j + 1, links, vertexPathways, vertexLongPathways, vehicle);	
+				}
+				else
+				{
+					if (vertexPathways.get(startIndex - 1).getTotalTime() > vehicle.getLongestTime())
+					{
+						vehicle.setLongestTime(vertexPathways.get(startIndex - 1).getTotalTime());
+						vehicle.setLongestPath(vertexPathways.get(startIndex - 1).getActualPath());
+					}
+				}	
+			}
+		}
+		
+		if (allNodes) 
+		{
+			if (vertexPathways.get(startIndex - 1).getTotalTime() > vehicle.getLongestTime())
+			{
+				vehicle.setLongestTime(vertexPathways.get(startIndex - 1).getTotalTime());
+				vehicle.setLongestPath(vertexPathways.get(startIndex - 1).getActualPath());
+			}
+		}
+		vertexPathways.get(startIndex - 1).setVisited(false);
+		vertexPathways.get(startIndex - 1).setTotalTime(Integer.MAX_VALUE);
+		vertexPathways.get(startIndex - 1).setActualPath(Integer.toString(startIndex));
+		
+	}
+	// Cette mï¿½thode permet de gï¿½rer la rï¿½ponse de l'usager lorsqu'il lui est demandï¿½ s'il veut saisir
 	// une nouvelle option ou non.
 	public static void makeAnotherChoice()
 	{
@@ -217,16 +309,16 @@ public class vertex
 		if(userAnswerInput.equalsIgnoreCase("oui"))
 		{
 			System.out.println("\n"+"------------------------------MENU------------------------------");
-			System.out.println("|   1-Mettre à jour la carte                                   |");
-			System.out.println("|   2-Déterminer le plus court chemin sécuritaire              |");
+			System.out.println("|   1-Mettre ï¿½ jour la carte                                   |");
+			System.out.println("|   2-Dï¿½terminer le plus court chemin sï¿½curitaire              |");
 			System.out.println("|   3-Extraire un sous-graphe                                  |");
 			System.out.println("|   4-Quitter                                                  |");
 			System.out.println("----------------------------------------------------------------");
-			System.out.println("Saisissez à nouveau un numéro du menu que vous voulez exécuter:");
+			System.out.println("Saisissez ï¿½ nouveau un numï¿½ro du menu que vous voulez exï¿½cuter:");
 		}
 		else if(userAnswerInput.equalsIgnoreCase("non"))
 		{
-			System.out.println("\n"+"Vous avez quitté le programme!");
+			System.out.println("\n"+"Vous avez quittï¿½ le programme!");
 			System.exit(0);
 		}
 		else
@@ -236,11 +328,11 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
-	// précisement lors de la saisie de l'index de départ. De plus, elle appelle la méthode displayEndIndex.
+	// Cette mï¿½thode permet de gï¿½rer les erreurs entrï¿½es par l'usager lors de l'option 2 du menu, plus
+	// prï¿½cisement lors de la saisie de l'index de dï¿½part. De plus, elle appelle la mï¿½thode displayEndIndex.
 	public static void displayStartIndex(ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
-		System.out.println("\n"+"Veuillez saisir l'index de départ:");
+		System.out.println("\n"+"Veuillez saisir l'index de dï¿½part:");
 		Scanner scanStartIndex = new Scanner(System.in);
 		int userInputStartIndex = scanStartIndex.nextInt();
 		
@@ -255,8 +347,8 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
-	// précisement lors de la saisie de l'index de fin. De plus, elle appelle la méthode vehicleChoice.
+	// Cette mï¿½thode permet de gï¿½rer les erreurs entrï¿½es par l'usager lors de l'option 2 du menu, plus
+	// prï¿½cisement lors de la saisie de l'index de fin. De plus, elle appelle la mï¿½thode vehicleChoice.
 	public static void displayEndIndex(int userInputStartIndex, ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"Veuillez maintenant saisir l'index de fin:");
@@ -274,13 +366,13 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
-	// précisement lors de la saisie du choix du véhicule. De plus, elle appelle la méthode riskChoice.
+	// Cette mï¿½thode permet de gï¿½rer les erreurs entrï¿½es par l'usager lors de l'option 2 du menu, plus
+	// prï¿½cisement lors de la saisie du choix du vï¿½hicule. De plus, elle appelle la mï¿½thode riskChoice.
 	public static void vehicleChoice(int userInputStartIndex, int userInputEndIndex, ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
-		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au type de véhicule désiré:");
-		System.out.println("(a) Véhicule avec une batterie à NI-MH");
-		System.out.println("(b) Véhicule avec une batterie à LI-ion");
+		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au type de vï¿½hicule dï¿½sirï¿½:");
+		System.out.println("(a) Vï¿½hicule avec une batterie ï¿½ NI-MH");
+		System.out.println("(b) Vï¿½hicule avec une batterie ï¿½ LI-ion");
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputVehicleType = scanAnswer.nextLine();
 		
@@ -299,14 +391,14 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode permet de gérer les erreurs entrées par l'usager lors de l'option 2 du menu, plus
-	// précisement lors de la saisie du facteur de risque. De plus, elle appelle la méthode plusCourtChemin.
+	// Cette mï¿½thode permet de gï¿½rer les erreurs entrï¿½es par l'usager lors de l'option 2 du menu, plus
+	// prï¿½cisement lors de la saisie du facteur de risque. De plus, elle appelle la mï¿½thode plusCourtChemin.
 	public static void riskChoice(int userInputStartIndex, int userInputEndIndex, String userInputVehicleType, ArrayList<vertex> vertex, int[][] links, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"Veuillez saisir la lettre qui correspond au risque de transportation:");
 		System.out.println("(a) Faible");
 		System.out.println("(b) Moyen");
-		System.out.println("(c) Élevé");
+		System.out.println("(c) ï¿½levï¿½");
 		Scanner scanAnswer = new Scanner(System.in);
 		String userInputTransportationRisk = scanAnswer.nextLine();
 		
@@ -321,16 +413,16 @@ public class vertex
 		}
 	}
 	
-	// Cette méthode affiche l'interface.
+	// Cette mï¿½thode affiche l'interface.
 	public static void displayMenu(ArrayList<vertex> vertex, Double recharge, int tempsRecharge, int goToRechargeIndex)
 	{
 		System.out.println("\n"+"------------------------------MENU------------------------------");
-		System.out.println("|   1-Mettre à jour la carte                                   |");
-		System.out.println("|   2-Déterminer le plus court chemin sécuritaire              |");
+		System.out.println("|   1-Mettre ï¿½ jour la carte                                   |");
+		System.out.println("|   2-Dï¿½terminer le plus court chemin sï¿½curitaire              |");
 		System.out.println("|   3-Extraire un sous-graphe                                  |");
 		System.out.println("|   4-Quitter                                                  |");
 		System.out.println("----------------------------------------------------------------");
-		System.out.println("Saisissez le numéro du menu que vous voulez exécuter:");
+		System.out.println("Saisissez le numï¿½ro du menu que vous voulez exï¿½cuter:");
 		
 		boolean continueLoop = true;
 		while(continueLoop) 
@@ -350,13 +442,13 @@ public class vertex
 					makeAnotherChoice();
 					break;
 				case "3": 
-					System.out.println("Extraire un sous-graphe.");
+					extraireGraphe(2, vertex, links, "Li-ion", "a");
 					System.out.println("\n"+"Voulez-vous saisir une nouvelle option? (oui/non)");
 					makeAnotherChoice();
 					break;
 				case "4": 
 					continueLoop = false;
-					System.out.println("\n"+"Vous avez quitté le programme!");
+					System.out.println("\n"+"Vous avez quittï¿½ le programme!");
 					System.exit(0);
 					break;
 				default:
