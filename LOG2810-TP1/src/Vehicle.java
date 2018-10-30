@@ -48,19 +48,23 @@ public class Vehicle
 		durability_ = 60/percentage*80;
 	}
 	
-	public String getLongestPath() {
+	public String getLongestPath() 
+	{
 		return longestPath_;
 	}
 
-	public void setLongestPath(String longestPath) {
+	public void setLongestPath(String longestPath) 
+	{
 		longestPath_ = longestPath;
 	}
 
-	public int getLongestTime() {
+	public int getLongestTime() 
+	{
 		return longestTime_;
 	}
 
-	public void setLongestTime(int longestTime) {
+	public void setLongestTime(int longestTime) 
+	{
 		longestTime_ = longestTime;
 	}
 }
