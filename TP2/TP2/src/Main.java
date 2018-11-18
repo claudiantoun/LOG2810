@@ -5,7 +5,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		
 		Graph graph = new Graph();
-		graph.readFromFile("./src/lexique6.txt");
+		graph.readFromFile("./src/lexique1.txt");
 
 	}	
 }
