@@ -1,10 +1,12 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Queue;
 
 public class Graph {
 
 	private Node root;
+	private Queue<String> fiveRecentlyUsed;
 	
 	public Graph() {
 		root = new Node("");
@@ -20,13 +22,23 @@ public class Graph {
 		    	for(int i = 0; i < line.length(); i++) {
 		    		String lettre = line.substring(i, i+1); 
 		    		currentNode = currentNode.getNextNode(lettre, line);
-		    	}	
+		    	}
+		    	currentNode.setMot(new Mot(line));
 		    	line = bufferedReader.readLine();
 		    }
 		} 
 		finally {
 			bufferedReader.close();
 		}
+	}
+	
+	public void displayWords(String input) {
+		Node currentNode = root;
+		for(int i = 0; i < input.length(); i++) {
+    		String lettre = input.substring(i, i+1); 
+    		currentNode = currentNode.getNextNode(lettre, input);
+    	}
+		currentNode.displayEachWord();
 	}
 }
 
