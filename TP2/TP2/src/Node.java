@@ -43,4 +43,16 @@ public class Node {
     		children_.get(i).displayEachWord();
     	}
 	}
+	
+	public Mot findWord(String mot, Node currentNode){
+		for(int i = 0; i < mot.length(); i++) {
+			String identification = mot.substring(0, i+1);
+			for(int j = 0; j < currentNode.children_.size(); j++) {
+				if(currentNode.children_.get(j).getIdentification().equals(identification)) {
+					currentNode = currentNode.children_.get(j);
+				}
+			}
+		}
+		return currentNode.getMot();
+	}
 }

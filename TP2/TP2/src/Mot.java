@@ -17,8 +17,8 @@ public class Mot {
 		return nbTimeUsed_;
 	}
 	
-	public void setNbTimeUsed(int nbTimeUsed) {
-		nbTimeUsed_ = nbTimeUsed;
+	public void incrementNbTimeUsed() {
+		nbTimeUsed_++;
 	}
 	
 	public boolean getRecentlyUsed() {

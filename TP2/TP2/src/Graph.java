@@ -40,5 +40,24 @@ public class Graph {
     	}
 		currentNode.displayEachWord();
 	}
+	
+	public void addToQueue(String input) {
+		Mot motChoisi = root.findWord(input, root);
+    	if(fiveRecentlyUsed.contains(input)) {
+    		for(int i = 0; i<fiveRecentlyUsed.size(); i++) {
+    			if(fiveRecentlyUsed.peek() != input) {
+    				fiveRecentlyUsed.add(fiveRecentlyUsed.peek());
+    			}
+    			fiveRecentlyUsed.poll();
+    		}
+    	}
+    	fiveRecentlyUsed.add(input);
+    	motChoisi.incrementNbTimeUsed();
+    	motChoisi.setRecentlyUsed(true);
+		if(fiveRecentlyUsed.size() > 5) {
+			root.findWord(fiveRecentlyUsed.peek(), root).setRecentlyUsed(false);		
+			fiveRecentlyUsed.poll();
+		}
+	}
 }
 
