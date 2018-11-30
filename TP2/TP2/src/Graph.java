@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.Vector;
 
@@ -11,6 +12,7 @@ public class Graph {
 	
 	public Graph() {
 		root = new Node("");
+		fiveRecentlyUsed = new ArrayDeque<String>();
 	}
 	
 	public void readFromFile(String filePath) throws IOException{
@@ -22,7 +24,7 @@ public class Graph {
 		    	Node currentNode = root;
 		    	for(int i = 0; i < line.length(); i++) {
 		    		String lettre = line.substring(i, i+1); 
-		    		currentNode = currentNode.getNextNode(lettre, line);
+		    		currentNode = currentNode.addNode(lettre, line);
 		    	}
 		    	currentNode.setMot(new Mot(line));
 		    	line = bufferedReader.readLine();
@@ -37,7 +39,9 @@ public class Graph {
 		Node currentNode = root;
 		Vector<Mot> words = new Vector<Mot>();
 		for(int i = 0; i < input.length(); i++) {
-    		String lettre = input.substring(i, i+1); 
+    		String lettre = input.substring(i, i+1);
+    		if(currentNode.getNextNode(lettre, input) == null)
+    			return null;
     		currentNode = currentNode.getNextNode(lettre, input);
     	}
 		currentNode.displayEachWord(words);
@@ -45,10 +49,12 @@ public class Graph {
 	}
 	
 	public void addToQueue(String input) {
+		if(root.findWord(input, root) == null)
+			return;
 		Mot motChoisi = root.findWord(input, root);
     	if(fiveRecentlyUsed.contains(input)) {
     		for(int i = 0; i<fiveRecentlyUsed.size(); i++) {
-    			if(fiveRecentlyUsed.peek() != input) {
+    			if(!(fiveRecentlyUsed.peek().equals(input))) {
     				fiveRecentlyUsed.add(fiveRecentlyUsed.peek());
     			}
     			fiveRecentlyUsed.poll();

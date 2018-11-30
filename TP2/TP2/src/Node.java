@@ -24,7 +24,7 @@ public class Node {
 		mot_ = mot;
 	}
 	
-	public Node getNextNode(String lettre, String mot) {
+	public Node addNode(String lettre, String mot) {
 		String newIdentification = identification_+lettre;
 		for(int i = 0; i<children_.size(); i++) {
 			if(children_.get(i).getIdentification().equals(newIdentification)) {
@@ -33,6 +33,16 @@ public class Node {
 		}
 		children_.add(new Node(newIdentification));
 		return children_.get(children_.size()-1);
+	}
+	
+	public Node getNextNode(String lettre, String mot) {
+		String newIdentification = identification_+lettre;
+		for(int i = 0; i<children_.size(); i++) {
+			if(children_.get(i).getIdentification().equals(newIdentification)) {
+				return children_.get(i);
+			}
+		}
+		return null;
 	}
 	
 	public void displayEachWord(Vector<Mot> words) {
