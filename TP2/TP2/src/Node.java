@@ -35,12 +35,13 @@ public class Node {
 		return children_.get(children_.size()-1);
 	}
 	
-	public void displayEachWord() {
+	public void displayEachWord(Vector<Mot> words) {
 		if(mot_ != null) {
 			//TODO : affichage du mot
+			words.add(mot_);
 		}
 		for(int i = 0; i < children_.size(); i++) {
-    		children_.get(i).displayEachWord();
+    		children_.get(i).displayEachWord(words);
     	}
 	}
 	

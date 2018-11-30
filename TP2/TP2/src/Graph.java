@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Queue;
+import java.util.Vector;
 
 public class Graph {
 
@@ -32,13 +33,15 @@ public class Graph {
 		}
 	}
 	
-	public void displayWords(String input) {
+	public Vector<Mot> displayWords(String input) {
 		Node currentNode = root;
+		Vector<Mot> words = new Vector<Mot>();
 		for(int i = 0; i < input.length(); i++) {
     		String lettre = input.substring(i, i+1); 
     		currentNode = currentNode.getNextNode(lettre, input);
     	}
-		currentNode.displayEachWord();
+		currentNode.displayEachWord(words);
+		return words;
 	}
 	
 	public void addToQueue(String input) {
