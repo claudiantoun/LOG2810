@@ -53,7 +53,8 @@ public class Graph {
 			return;
 		Mot motChoisi = root.findWord(input, root);
     	if(fiveRecentlyUsed.contains(input)) {
-    		for(int i = 0; i<fiveRecentlyUsed.size(); i++) {
+    		int size = fiveRecentlyUsed.size();
+    		for(int i = 0; i<size; i++) {
     			if(!(fiveRecentlyUsed.peek().equals(input))) {
     				fiveRecentlyUsed.add(fiveRecentlyUsed.peek());
     			}
