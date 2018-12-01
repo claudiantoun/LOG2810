@@ -67,7 +67,7 @@ public class Interface extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				lexiconFrame = new JFrame("Lexique");
-                lexiconLabel = new JLabel("---------LEXIQUE--------");
+                lexiconLabel = new JLabel("- - - - - - - - - -LEXIQUE- - - - - - - - - -");
                 lexiconPanel = new JPanel();
                 lexiconList = new JList<String>();
                 lexiconListScrollPanel = new JScrollPane(lexiconList);
@@ -78,6 +78,7 @@ public class Interface extends JFrame
                 lexiconFrame.add(lexiconPanel);
                 
                 lexiconFrame.setSize(400, 250);
+                lexiconFrame.setResizable(true);
                 lexiconFrame.setVisible(true);
 			}
 		});
