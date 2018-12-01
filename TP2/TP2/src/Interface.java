@@ -77,8 +77,8 @@ public class Interface extends JFrame
                 lexiconPanel.add(lexiconListScrollPanel);            
                 lexiconFrame.add(lexiconPanel);
                 
-                lexiconFrame.setSize(400, 250);
-                lexiconFrame.setResizable(true);
+                lexiconFrame.setSize(300, 250);
+                lexiconFrame.setResizable(false);
                 lexiconFrame.setVisible(true);
 			}
 		});
