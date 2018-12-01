@@ -12,7 +12,10 @@ public class Node
 		mot_ = null;
 		identification_ = identification;
 	}
-	
+	public Vector<Node> getChildren()
+	{
+		return children_;
+	}
 	public String getIdentification() 
 	{
 		return identification_;

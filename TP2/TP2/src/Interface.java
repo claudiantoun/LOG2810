@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Vector;
@@ -18,11 +20,19 @@ public class Interface extends JFrame
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JLabel label;
-	private JList<String> list;
+	private JList<String> wordList;
+	private JList<String> lexiconList;
 	private JTextField textField;
-	private JScrollPane scrollPanel;
-	private JButton button;
+	private JScrollPane wordListScrollPanel;
+	private JScrollPane lexiconListScrollPanel;
+	private JButton lexiconButton;
 	private Graph graph;
+	
+	
+	private JFrame lexiconFrame;
+	private JPanel lexiconPanel;
+	private JLabel lexiconLabel;
+	
 	
 	public Interface(Graph graph) 
 	{
@@ -38,19 +48,40 @@ public class Interface extends JFrame
 		
 		panel = new JPanel();
 		label = new JLabel("Entrer le mot désiré :     ");
-		button = new JButton("Afficher les labels");
-		list = new JList<String>();
+		lexiconButton = new JButton("Afficher les labels");
+		wordList = new JList<String>();
 		textField = new JTextField(23);
-		scrollPanel = new JScrollPane(list);
+		wordListScrollPanel = new JScrollPane(wordList);
 		
 		panel.add(label, BorderLayout.WEST);
 		panel.add(textField, BorderLayout.NORTH);
 		textField.setAlignmentY(TOP_ALIGNMENT);
-		panel.add(button,  BorderLayout.SOUTH);
-		panel.add(scrollPanel);
+		panel.add(lexiconButton,  BorderLayout.SOUTH);
+		panel.add(wordListScrollPanel);
 		this.add(panel);
 		this.setVisible(true);
 		
+		
+		
+		
+		lexiconButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				lexiconFrame = new JFrame("Lexique");
+                lexiconLabel = new JLabel("---------LEXIQUE--------");
+                lexiconFrame.setVisible(true);
+                lexiconFrame.setSize(400, 400);
+                lexiconPanel = new JPanel();
+                lexiconFrame.add(lexiconPanel);
+                lexiconPanel.add(lexiconLabel);
+                
+                lexiconList = new JList<String>();
+                lexiconListScrollPanel = new JScrollPane(lexiconList);
+                lexiconPanel.add(lexiconListScrollPanel);
+			}
+		});
 		
 		textField.addKeyListener(new KeyListener() 
 		{	
@@ -73,7 +104,8 @@ public class Interface extends JFrame
 					return;
 				}				
 				Vector<Mot> words = graph.displayWords(input);
-				updateList(words);
+				updateList(words, wordList);
+				updateList(graph.getLexiconWords(), lexiconList);
 			}
 
 			@Override
@@ -81,7 +113,7 @@ public class Interface extends JFrame
 		});
 	}
 	
-	public void updateList(Vector<Mot> words) 
+	public void updateList(Vector<Mot> words, JList<String> list) 
 	{
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		for (int i = 0; i < words.size(); i++)
@@ -89,7 +121,11 @@ public class Interface extends JFrame
 			String nom = words.get(i).getNom(); 
 			int utilisation = words.get(i).getNbTimeUsed(); 
 			int recent = words.get(i).getRecentlyUsed() == false? 0 : 1;
-			String affichage = String.format("%2d %4d    %-5s", utilisation, recent, nom);
+			String affichage = "";
+			if (list.equals(lexiconList))
+				 affichage = String.format("%2d %4d    %-5s", utilisation, recent, nom);
+			else 
+				affichage = nom;
 			model.addElement(affichage);
 			list.setModel(model);
 		}
@@ -98,14 +134,14 @@ public class Interface extends JFrame
 	public void wipeSelection() 
 	{
 		DefaultListModel<String> model = new DefaultListModel<String>();
-		list.setModel(model);
+		wordList.setModel(model);
 		textField.setText("");
 	}
 	
 	public void wipeList() 
 	{
 		DefaultListModel<String> model = new DefaultListModel<String>();
-		list.setModel(model);
+		wordList.setModel(model);
 	}
 
 }

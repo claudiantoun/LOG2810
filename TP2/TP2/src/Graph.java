@@ -2,11 +2,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Vector;
 
 public class Graph 
 {
+	private Vector<Mot> lexicon;
 	private Node root;
 	private Queue<String> fiveRecentlyUsed;
 	
@@ -14,8 +16,12 @@ public class Graph
 	{
 		root = new Node("");
 		fiveRecentlyUsed = new ArrayDeque<String>();
+		lexicon = new Vector<Mot>();
 	}
-	
+	public Vector<Mot> getLexiconWords()
+	{
+		return lexicon;
+	}
 	public void readFromFile(String filePath) throws IOException
 	{
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
@@ -31,6 +37,7 @@ public class Graph
 		    		currentNode = currentNode.addNode(lettre, line);
 		    	}
 		    	currentNode.setMot(new Mot(line));
+		    	lexicon.add(new Mot(line));
 		    	line = bufferedReader.readLine();
 		    }
 		} 
@@ -56,7 +63,7 @@ public class Graph
 		currentNode.displayEachWord(words);
 		return words;
 	}
-	
+		
 	public void addToQueue(String input) 
 	{
 		if(root.findWord(input, root) == null)
@@ -79,10 +86,31 @@ public class Graph
     	fiveRecentlyUsed.add(input);
     	motChoisi.incrementNbTimeUsed();
     	motChoisi.setRecentlyUsed(true);
-		if(fiveRecentlyUsed.size() > 5) 
+    	
+    	for (int j = 0; j < lexicon.size(); j++)
+    	{
+    		if (lexicon.get(j).getNom() == motChoisi.getNom())
+    		{
+    			lexicon.get(j).incrementNbTimeUsed();
+    			lexicon.get(j).setRecentlyUsed(true);
+    		}
+    	}
+    	
+    	if(fiveRecentlyUsed.size() > 5) 
 		{
-			root.findWord(fiveRecentlyUsed.peek(), root).setRecentlyUsed(false);		
+    		Mot leastRecentlyUsedWord = root.findWord(fiveRecentlyUsed.peek(), root);
+    		leastRecentlyUsedWord.setRecentlyUsed(false);
+    		
+    		for (int j = 0; j < lexicon.size(); j++)
+        	{
+        		if (lexicon.get(j).getNom() == leastRecentlyUsedWord.getNom())
+        		{
+        			lexicon.get(j).setRecentlyUsed(false);
+        		}
+        	}
+    		
 			fiveRecentlyUsed.poll();
+			
 		}
 	}
 }
