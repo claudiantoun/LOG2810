@@ -1,31 +1,38 @@
-public class Mot {
+public class Mot 
+{
 	private String nom_;
 	private int nbTimeUsed_;
 	private boolean recentlyUsed_;
 	
-	public Mot(String nom){
+	public Mot(String nom)
+	{
 		nom_ = nom;
 		nbTimeUsed_ = 0;
 		recentlyUsed_ = false;
 	}
 	
-	public String getNom() {
+	public String getNom() 
+	{
 		return nom_;
 	}
 	
-	public int getNbTimeUsed() {
+	public int getNbTimeUsed() 
+	{
 		return nbTimeUsed_;
 	}
 	
-	public void incrementNbTimeUsed() {
+	public void incrementNbTimeUsed() 
+	{
 		nbTimeUsed_++;
 	}
 	
-	public boolean getRecentlyUsed() {
+	public boolean getRecentlyUsed() 
+	{
 		return recentlyUsed_;
 	}
 	
-	public void setRecentlyUsed(boolean recentlyUsed) {
+	public void setRecentlyUsed(boolean recentlyUsed) 
+	{
 		recentlyUsed_ = recentlyUsed;
 	}
 }
