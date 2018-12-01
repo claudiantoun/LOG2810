@@ -68,15 +68,17 @@ public class Interface extends JFrame
 			{
 				lexiconFrame = new JFrame("Lexique");
                 lexiconLabel = new JLabel("---------LEXIQUE--------");
-                lexiconFrame.setVisible(true);
-                lexiconFrame.setSize(400, 250);
                 lexiconPanel = new JPanel();
-                lexiconFrame.add(lexiconPanel);
-                lexiconPanel.add(lexiconLabel);
-                
                 lexiconList = new JList<String>();
                 lexiconListScrollPanel = new JScrollPane(lexiconList);
-                lexiconPanel.add(lexiconListScrollPanel);
+                
+                updateList(graph.getLexiconWords(),lexiconList);
+                lexiconPanel.add(lexiconLabel, BorderLayout.NORTH);
+                lexiconPanel.add(lexiconListScrollPanel);            
+                lexiconFrame.add(lexiconPanel);
+                
+                lexiconFrame.setSize(400, 250);
+                lexiconFrame.setVisible(true);
 			}
 		});
 		
@@ -93,6 +95,7 @@ public class Interface extends JFrame
 				{
 					graph.addToQueue(input);
 					wipeSelection();
+					updateList(graph.getLexiconWords(),lexiconList);
 					return;
 				}
 				if(graph.displayWords(input) == null) 
@@ -102,7 +105,6 @@ public class Interface extends JFrame
 				}				
 				Vector<Mot> words = graph.displayWords(input);
 				updateList(words, wordList);
-				updateList(graph.getLexiconWords(), lexiconList);
 			}
 
 			@Override
