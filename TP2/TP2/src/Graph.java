@@ -70,7 +70,7 @@ public class Graph
 		{
 			return;
 		}
-		Mot motChoisi = root.findWord(input, root);
+		
     	if(fiveRecentlyUsed.contains(input)) 
     	{
     		int size = fiveRecentlyUsed.size();
@@ -84,9 +84,7 @@ public class Graph
     		}
     	}
     	fiveRecentlyUsed.add(input);
-    	motChoisi.incrementNbTimeUsed();
-    	motChoisi.setRecentlyUsed(true);
-    	
+    	Mot motChoisi = root.findWord(input, root);
     	for (int j = 0; j < lexicon.size(); j++)
     	{
     		if (lexicon.get(j).getNom() == motChoisi.getNom())
@@ -99,7 +97,6 @@ public class Graph
     	if(fiveRecentlyUsed.size() > 5) 
 		{
     		Mot leastRecentlyUsedWord = root.findWord(fiveRecentlyUsed.peek(), root);
-    		leastRecentlyUsedWord.setRecentlyUsed(false);
     		
     		for (int j = 0; j < lexicon.size(); j++)
         	{
