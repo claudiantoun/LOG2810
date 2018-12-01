@@ -110,7 +110,6 @@ public class Graph
         	}
     		
 			fiveRecentlyUsed.poll();
-			
 		}
 	}
 }

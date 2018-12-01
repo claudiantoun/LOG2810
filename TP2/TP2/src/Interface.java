@@ -61,9 +61,6 @@ public class Interface extends JFrame
 		this.add(panel);
 		this.setVisible(true);
 		
-		
-		
-		
 		lexiconButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -72,7 +69,7 @@ public class Interface extends JFrame
 				lexiconFrame = new JFrame("Lexique");
                 lexiconLabel = new JLabel("---------LEXIQUE--------");
                 lexiconFrame.setVisible(true);
-                lexiconFrame.setSize(400, 400);
+                lexiconFrame.setSize(400, 250);
                 lexiconPanel = new JPanel();
                 lexiconFrame.add(lexiconPanel);
                 lexiconPanel.add(lexiconLabel);
