@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,35 +16,38 @@ import javax.swing.JTextField;
 
 public class Interface extends JFrame
 {
+	//Éléments JFrame de la fenêtre principale.
 	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JLabel label;
 	private JList<String> wordList;
-	private JList<String> lexiconList;
+	
 	private JTextField textField;
 	private JScrollPane wordListScrollPanel;
 	private JScrollPane lexiconListScrollPanel;
 	private JButton lexiconButton;
 	private Graph graph;
 	
-	
+	//Éléments JFrame de la fenêtre du lexique.
 	private JFrame lexiconFrame;
 	private JPanel lexiconPanel;
 	private JLabel lexiconLabel;
+	private JList<String> lexiconList;
 	
-	
+	//Constructeur par paramètres de l'interface.
 	public Interface(Graph graph) 
 	{
 		this.graph = graph;
 		creerInterface();
 	}
-	
+	//Cette méthode créé l'interface et intéragit avec les éléments du graphe.
 	public void  creerInterface() {
 		this.setTitle("LOG2810 - TP2");
 		this.setSize(600, 240);
 		this.setResizable(false); 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		//Création et affichage de la fenêtre principale.
 		panel = new JPanel();
 		label = new JLabel("Entrer le mot désiré :     ");
 		lexiconButton = new JButton("Afficher les labels");
@@ -63,9 +65,11 @@ public class Interface extends JFrame
 		
 		lexiconButton.addActionListener(new ActionListener()
 		{
+			//Création et affichage de la fenêtre du lexique lorsque le bouton est appuyé.
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				
 				lexiconFrame = new JFrame("Lexique");
                 lexiconLabel = new JLabel("- - - - - - - - - -LEXIQUE- - - - - - - - - -");
                 lexiconPanel = new JPanel();
@@ -83,11 +87,12 @@ public class Interface extends JFrame
 			}
 		});
 		
+		//Intéraction entre les listes et le mot saisi dans le JTextField.
 		textField.addKeyListener(new KeyListener() 
 		{	
 			@Override
 			public void keyPressed(KeyEvent e) {}
-
+			
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
@@ -107,12 +112,12 @@ public class Interface extends JFrame
 				Vector<Mot> words = graph.displayWords(input);
 				updateList(words, wordList);
 			}
-
+			
 			@Override
 			public void keyTyped(KeyEvent e) {}
 		});
 	}
-	
+	//Cette méthode met à jour la liste de mots qu'affiche l'interface.
 	public void updateList(Vector<Mot> words, JList<String> list) 
 	{
 		DefaultListModel<String> model = new DefaultListModel<String>();
@@ -130,14 +135,14 @@ public class Interface extends JFrame
 			list.setModel(model);
 		}
 	} 
-	
+	//Cette méthode fait disparaître la saisie de mot du JTextField de la fenêtre principale.
 	public void wipeSelection() 
 	{
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		wordList.setModel(model);
 		textField.setText("");
 	}
-	
+	//Cette méthode fait disparaître la liste de mots à l'intérieur du JScrollPane.
 	public void wipeList() 
 	{
 		DefaultListModel<String> model = new DefaultListModel<String>();
