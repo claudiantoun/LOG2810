@@ -31,6 +31,8 @@ public class Node
 		mot_ = mot;
 	}
 	
+	//ajoute le mot au noeud correspondant
+	//si le noeud n'existe pas, l'ajoute à un nouveau noeud
 	public Node addNode(String lettre, String mot) 
 	{
 		String newIdentification = identification_ + lettre;
@@ -45,6 +47,7 @@ public class Node
 		return children_.get(children_.size() - 1);
 	}
 	
+	//Se rend vers le prochain noeud s'il existe
 	public Node getNextNode(String lettre, String mot) 
 	{
 		String newIdentification = identification_ + lettre;
@@ -58,6 +61,8 @@ public class Node
 		return null;
 	}
 	
+	//ajoute au vecteur donné en paramètre tous les mots
+	//qui sont dans le noeud présent ou sous celui-ci
 	public void displayEachWord(Vector<Mot> words) 
 	{
 		if(mot_ != null) 
@@ -70,6 +75,7 @@ public class Node
     	}
 	}
 	
+	//trouve le mot passé en paramètre à partir du noeud passé en paramètre
 	public Mot findWord(String mot, Node currentNode)
 	{
 		for(int i = 0; i < mot.length(); i++) 

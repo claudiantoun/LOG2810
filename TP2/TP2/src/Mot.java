@@ -1,3 +1,4 @@
+//Cette classe est utilisée pour représenter chaue mot du lexique
 public class Mot 
 {
 	private String nom_;

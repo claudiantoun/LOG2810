@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Vector;
 
@@ -12,16 +11,26 @@ public class Graph
 	private Node root;
 	private Queue<String> fiveRecentlyUsed;
 	
+	//constructeur de l'arbre des mots (initialisation)
 	public Graph() 
 	{
 		root = new Node("");
 		fiveRecentlyUsed = new ArrayDeque<String>();
 		lexicon = new Vector<Mot>();
 	}
+	
 	public Vector<Mot> getLexiconWords()
 	{
 		return lexicon;
 	}
+	
+	public Queue<String> getFiveRecentlyUsed()
+	{
+		return fiveRecentlyUsed;
+	}
+	
+	//lit le lexique dont le nom est passé en paramètre 
+	//et construit l'arbre à partir de celui-ci
 	public void readFromFile(String filePath) throws IOException
 	{
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
@@ -47,6 +56,8 @@ public class Graph
 		}
 	}
 	
+	//Se rend jusqu'au noeud dont l'identifiant est égal au input
+	//et affiche tous les mots des noeuds sous ce noeud
 	public Vector<Mot> displayWords(String input) 
 	{
 		Node currentNode = root;
@@ -63,7 +74,12 @@ public class Graph
 		currentNode.displayEachWord(words);
 		return words;
 	}
-		
+	
+	/*Lorsqu'un mot est sélectionné, l'ajoute à la queue des mots 
+	 *récemment utilisés et modifie les attributs de ce mot
+	 *gère aussi la queue pour ne pas que sa taille dépasse 5 
+	 *et que les mots n'y soit pas répétés
+	 */
 	public void addToQueue(String input) 
 	{
 		if(root.findWord(input, root) == null)
