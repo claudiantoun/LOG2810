@@ -106,7 +106,7 @@ public class Interface extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				
-				queueFrame = new JFrame("Lexique");
+				queueFrame = new JFrame("Mots récemment utilisés");
                 queueLabel = new JLabel("---Mots récemment utilisés---");
                 queuePanel = new JPanel();
                 queueList = new JList<String>();
